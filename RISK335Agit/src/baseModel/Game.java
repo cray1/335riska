@@ -131,7 +131,7 @@ public class Game extends CommandInterface {
 					.get(i)
 					.setUnitsOnTerritory(
 							map.getTerritories().get(i).getUnitsOnTerritory() + 1);
-			map.getTerritories().get(i).setOwner(p);
+			map.getTerritories().get(i).setOwner(p.getTeam());
 			p.setNumberOfTerritories(p.getNumberOfTerritories() + 1);
 			this.notifyObservers(p);
 			this.notifyObservers(map.getTerritories().get(i));
@@ -166,10 +166,11 @@ public class Game extends CommandInterface {
 			int numOfUnitsToMove) {
 		try {
 
-			if ((orig.getOwner() == p)
+			if ((orig.getOwner() == p.getTeam())
 					&& ((orig.getUnitsOnTerritory() > 1) && (numOfUnitsToMove < orig
 							.getUnitsOnTerritory())))
-				if ((dest.getUnitsOnTerritory() <= 0) || (dest.getOwner() == p)) {
+				if ((dest.getUnitsOnTerritory() <= 0)
+						|| (dest.getOwner() == p.getTeam())) {
 					orig.setUnitsOnTerritory(orig.getUnitsOnTerritory()
 							- numOfUnitsToMove);
 					dest.setUnitsOnTerritory(dest.getUnitsOnTerritory()

@@ -15,7 +15,7 @@ public class Territory {
 	private ArrayList<Territory> neighbors;
 	private final String name;
 	private final String parentContinent;
-	private Player owner;
+	private Team owner;
 	private int UnitsOnTerritory;
 
 	/**
@@ -55,7 +55,7 @@ public class Territory {
 	 * @return the owner
 	 * @author Chris Ray Created on 2:18:13 AM Nov 27, 2011
 	 */
-	public Player getOwner() {
+	public Team getOwner() {
 		return owner;
 	}
 
@@ -64,7 +64,7 @@ public class Territory {
 	 *            the owner to set
 	 * @author Chris Ray Created on 2:18:13 AM Nov 27, 2011
 	 */
-	public void setOwner(Player owner) {
+	public void setOwner(Team owner) {
 		this.owner = owner;
 	}
 
