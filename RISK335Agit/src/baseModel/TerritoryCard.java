@@ -11,6 +11,7 @@ package baseModel;
 public class TerritoryCard {
 
 	private CardType cardType;
+	private Territory cardTerritory;
 
 	/**
 	 * @return the cardType
@@ -29,5 +30,23 @@ public class TerritoryCard {
 	 */
 	public TerritoryCard(CardType type) {
 		cardType = type;
+		setCardTerritory(null);
+	}
+
+	/**
+	 * @return the cardTerritory
+	 * @author Chris Ray Created on 4:36:36 PM Nov 29, 2011
+	 */
+	public Territory getCardTerritory() {
+		return cardTerritory;
+	}
+
+	/**
+	 * @param cardTerritory
+	 *            the cardTerritory to set
+	 * @author Chris Ray Created on 4:36:36 PM Nov 29, 2011
+	 */
+	public void setCardTerritory(Territory cardTerritory) {
+		this.cardTerritory = cardTerritory;
 	}
 }
