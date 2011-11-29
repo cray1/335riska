@@ -11,7 +11,7 @@ import javax.swing.JLabel;
 
 /**
  * @author AJ Venne Created on 8:09:3///2 PM Nov 26, 2011
- */
+ *////
 public class MapView extends MasterViewPanel {
 	/**
 	 * @author AJ Venne Created on 8:10:07 PM Nov 26, 2011
