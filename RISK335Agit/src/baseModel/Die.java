@@ -10,7 +10,7 @@ import java.util.Random;
 /**
  * @author Chris Ray Created on 7:25:14 PM Nov 25, 2011
  */
-public class Die {
+public class Die {// test
 	private int roll;
 
 	/**

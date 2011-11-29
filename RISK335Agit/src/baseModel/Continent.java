@@ -44,7 +44,7 @@ public class Continent {
 	 * @return the name
 	 * @author Chris Ray Created on 2:24:17 AM Nov 27, 2011
 	 */
-	public String getName() {
+	public String getName() { //
 		return name;
 	}
 

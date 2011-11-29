@@ -11,7 +11,7 @@ import java.util.Stack;
 /**
  * @author Chris Ray Created on 6:37:08 PM Nov 25, 2011
  */
-public class CardDeck {
+public class CardDeck {// //
 	private Stack<TerritoryCard> deck;
 
 	/***
@@ -21,6 +21,7 @@ public class CardDeck {
 	 * 
 	 */
 	public CardDeck() {
+		deck = new Stack<TerritoryCard>();
 		// push Soldier cards onto stack 11each
 		TerritoryCard soldier = new TerritoryCard(CardType.SOLDIER);
 		for (int i = 0; i < 11; i++)
