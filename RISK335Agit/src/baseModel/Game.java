@@ -169,8 +169,7 @@ public class Game extends CommandInterface {
 			if ((orig.getOwner() == p.getTeam())
 					&& ((orig.getUnitsOnTerritory() > 1) && (numOfUnitsToMove < orig
 							.getUnitsOnTerritory())))
-				if ((dest.getUnitsOnTerritory() <= 0)
-						|| (dest.getOwner() == p.getTeam())) {
+				if ((dest.getUnitsOnTerritory() <= 0) || (dest.getOwner() == p.getTeam())) {
 					orig.setUnitsOnTerritory(orig.getUnitsOnTerritory()
 							- numOfUnitsToMove);
 					dest.setUnitsOnTerritory(dest.getUnitsOnTerritory()
