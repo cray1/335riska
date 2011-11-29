@@ -1,5 +1,5 @@
 package gui;
-
+//
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.MouseEvent;
@@ -10,8 +10,8 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
 /**
- * @author AJ Venne Created on 8:09:32 PM Nov 26, 2011
- */
+ * @author AJ Venne Created on 8:09:3///2 PM Nov 26, 2011
+ *////
 public class MapView extends MasterViewPanel {
 	/**
 	 * @author AJ Venne Created on 8:10:07 PM Nov 26, 2011
