@@ -6,6 +6,7 @@
 package baseModel;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * @author Chris Ray Created on 2:13:57 AM Nov 27, 2011
@@ -38,6 +39,19 @@ public class Continent {
 	 */
 	public ArrayList<Territory> getChildren() {
 		return children;
+	}
+
+	/**
+	 * @author Chris Ray Created on 2:30:12 PM Nov 29, 2011
+	 * @return Hashmap representing the children of a continent
+	 * 
+	 */
+	public HashMap<String, Territory> getChildrenAsHashMap() {
+		HashMap<String, Territory> childTerritories = new HashMap<String, Territory>();
+		for (Territory ter : this.children)
+			childTerritories.put(ter.toString(), ter);
+
+		return childTerritories;
 	}
 
 	/**
