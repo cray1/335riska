@@ -1,5 +1,5 @@
 package gui;
 
 public enum Views {
-	TITLE, MAP, BATTLE, PREVIOUS
+	TITLE,MAP,BATTLE,PREVIOUS
 }

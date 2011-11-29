@@ -8,9 +8,8 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 
-/**
- * @author AJ Venne Created on 8:11:11 PM Nov 26, 2011
- */
+
+
 @SuppressWarnings("serial")
 public class TitleView extends MasterViewPanel {
 
@@ -47,7 +46,6 @@ public class TitleView extends MasterViewPanel {
 
 	private class NewGameListener implements ActionListener {
 
-		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			m.changeView(Views.MAP, null);
 		}
@@ -56,14 +54,12 @@ public class TitleView extends MasterViewPanel {
 
 	private class ExitListener implements ActionListener {
 
-		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			System.exit(0);
 		}
 
 	}
 
-	@Override
 	public String toString() {
 		return "TITLE";
 	}
