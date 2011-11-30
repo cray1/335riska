@@ -34,20 +34,13 @@ public class MapView extends MasterViewPanel{
 	HashMap<String, Territory> eur;
 	HashMap<String, Territory> aus;
 	HashMap<String, Territory> asia;
+	HashMap<String, Territory> territories;
 	Image mapImage;
 	public MapView(MasterView m) {
 		super(m);
 		setUpGUI();
+		setUpGame();
 		
-		newGame = new Game();
-		gameMap = newGame.getMap();
-		continents = gameMap.getMap();
-		na = continents.get("North America").getChildrenAsHashMap();
-		sa = continents.get("South America").getChildrenAsHashMap();
-		afr = continents.get("Africa").getChildrenAsHashMap();
-		eur = continents.get("Europe").getChildrenAsHashMap();
-		aus = continents.get("Australia").getChildrenAsHashMap();
-		asia = continents.get("Asia").getChildrenAsHashMap();
 	}
 	private void setUpGUI(){
 		this.setVisible(true);
@@ -82,9 +75,23 @@ public class MapView extends MasterViewPanel{
 //		userBar.add(quit);
 		
 	}
+	
+	private void setUpGame(){
+		newGame = new Game();
+		gameMap = newGame.getMap();
+		continents = gameMap.getMap();
+		territories = gameMap.getMapAsStringTerritoryHashMap();
+		na = continents.get("North America").getChildrenAsHashMap();
+		sa = continents.get("South America").getChildrenAsHashMap();
+		afr = continents.get("Africa").getChildrenAsHashMap();
+		eur = continents.get("Europe").getChildrenAsHashMap();
+		aus = continents.get("Australia").getChildrenAsHashMap();
+		asia = continents.get("Asia").getChildrenAsHashMap();
+	}
+	
 	public void paintComponent(Graphics g){
 		
-		mapImage = mapImage.getScaledInstance(this.getWidth(), this.getHeight(), 2);
+//		mapImage = mapImage.getScaledInstance(this.getWidth(), this.getHeight(), 2);
 
 	}
 	private class mouse implements MouseListener{
@@ -92,9 +99,10 @@ public class MapView extends MasterViewPanel{
 		@Override
 		public void mouseClicked(MouseEvent e) {
 			if(e.getX() < buffImage.getWidth() && e.getY() < buffImage.getHeight()){
-			System.out.println(e.getX() + "," + e.getY() + " COLOR: " + buffImage.getRGB(e.getX(), e.getY()));
+//			System.out.println(e.getX() + "," + e.getY() + " COLOR: " + buffImage.getRGB(e.getX(), e.getY()));
 			//calls helper method designed to check which area is being clicked based on coordinates and color
-			System.out.println(getLocation(e.getX(), e.getY()));
+//			System.out.println(getLocation(e.getX(), e.getY()));
+			System.out.println(territories.get(getLocation(e.getX(), e.getY())).toString());
 			}
 		}
 
@@ -148,7 +156,7 @@ public class MapView extends MasterViewPanel{
 		//NORTH AMERICA
 		//Area 1
 		if(buffImage.getRGB(x, y) == -8355840 && y < (buffImage.getHeight() / 5.3125)){
-//			na.get("Alaska").setOwner(new Player(Team.GREEN));
+
 			return "Alaska";  //+ na.get("Alaska").getOwner().getTeam();
 		}
 		//Area 2
@@ -166,7 +174,6 @@ public class MapView extends MasterViewPanel{
 		}
 		//Area 5
 		if(buffImage.getRGB(x, y) == -256 && x >  (buffImage.getWidth() / 4.066666667)){
-//			continents.get("nAmerica").getChildren();
 			return "Greenland";
 		}
 		//Area 6
@@ -263,7 +270,7 @@ public class MapView extends MasterViewPanel{
 		}
 		//Area 4
 		if(buffImage.getRGB(x, y) == -16744193 && y < (buffImage.getHeight() / 5.666666667)){
-			return "Scandanavia";
+			return "Scandinavia";
 		}
 		//Area 5
 		if(buffImage.getRGB(x, y) == -16760704 && y > (buffImage.getHeight() / 4.857142857)){

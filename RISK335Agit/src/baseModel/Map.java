@@ -94,7 +94,7 @@ public class Map {
 		setUpNeighborsOfTerritories();
 		buildContinents();
 		buildMap();
-
+		
 		ArrayList<Territory> naTerritories = new ArrayList<Territory>();
 		naTerritories.add(alaska);
 		Continent nAmerica = new Continent("North America", naTerritories, 5);
@@ -110,7 +110,7 @@ public class Map {
 	private void buildTerritories() {
 		na = "North America";
 		alaska = new Territory("Alaska", na);
-		nwTerritory = new Territory("North West Territory", na);
+		nwTerritory = new Territory("Northwest Territory", na);
 		alberta = new Territory("Alberta", na);
 		ontario = new Territory("Ontario", na);
 		greenland = new Territory("Greenland", na);
@@ -136,8 +136,8 @@ public class Map {
 		au = "Australia";
 		indonesia = new Territory("Indonesia", au);
 		newGuinea = new Territory("New Guinea", au);
-		wAustralia = new Territory("Western Austrailia", au);
-		eAustralia = new Territory("Eastern Austrailia", au);
+		wAustralia = new Territory("Western Australia", au);
+		eAustralia = new Territory("Eastern Australia", au);
 
 		eu = "Europe";
 		iceland = new Territory("Iceland", eu);
