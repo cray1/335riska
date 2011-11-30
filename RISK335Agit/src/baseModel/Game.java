@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -19,6 +20,8 @@ public class Game extends CommandInterface {
 	private int unitMultiplier;
 	private Map map;
 	private Boolean firstTerritory;
+	private Move move;
+	private LinkedList<Player> players;
 
 	/**
 	 * 
@@ -30,6 +33,8 @@ public class Game extends CommandInterface {
 		unitMultiplier = 4;
 		setMap(new Map());
 		firstTerritory = true;
+		move = new Move();
+		setPlayers(new LinkedList<Player>());
 	}
 
 	/*
@@ -201,6 +206,31 @@ public class Game extends CommandInterface {
 			// capture:
 			if (destination.getUnitsOnTerritory() == 0) {
 				move(p, origin, destination, remainingArmy);
+				updateMove(p, origin, destination);
+
+				// find destination's owner player
+				Iterator<Player> playersItr = players.iterator();
+				Player current = new Player(null);
+				while (playersItr.hasNext()) {
+					current = playersItr.next();
+					if (current.getTeam() == destination.getOwner())
+						break;
+				}
+				current.setNumberOfTerritories(current.getNumberOfTerritories() - 1);
+				// check if current has no territories
+				if (current.getNumberOfTerritories() == 0) {
+					// give his or her cards to player p
+					p.getCards().addAll(current.getCards());
+
+					// remove current from players List
+					players.remove(current);
+					/*
+					 * while(p.getCards().size()>4) { //request turn in cards
+					 * from GUI }
+					 */
+					this.notifyObservers(players);
+
+				}
 				if (firstTerritory) {
 					// add card
 					drawCard(p);
@@ -247,6 +277,7 @@ public class Game extends CommandInterface {
 					}
 					this.notifyObservers(orig);
 					this.notifyObservers(dest);
+					updateMove(p, orig, dest);
 					return true;
 				}
 			return false;
@@ -254,6 +285,18 @@ public class Game extends CommandInterface {
 
 			return false;
 		}
+	}
+
+	/**
+	 * 
+	 * @author Chris Ray Created on 9:12:29 PM Nov 29, 2011
+	 * 
+	 */
+	private void updateMove(Player p, Territory orig, Territory dest) {
+		move.setP(p);
+		move.setDest(dest);
+		move.setOrig(orig);
+
 	}
 
 	private void unitMultiplierUp() {
@@ -278,5 +321,39 @@ public class Game extends CommandInterface {
 	 */
 	public void setMap(Map map) {
 		this.map = map;
+	}
+
+	/**
+	 * @return the move
+	 * @author Chris Ray Created on 9:07:24 PM Nov 29, 2011
+	 */
+	public Move getMove() {
+		return move;
+	}
+
+	/**
+	 * @param move
+	 *            the move to set
+	 * @author Chris Ray Created on 9:07:24 PM Nov 29, 2011
+	 */
+	public void setMove(Move move) {
+		this.move = move;
+	}
+
+	/**
+	 * @return the players
+	 * @author Chris Ray Created on 9:23:49 PM Nov 29, 2011
+	 */
+	public LinkedList<Player> getPlayers() {
+		return players;
+	}
+
+	/**
+	 * @param players
+	 *            the players to set
+	 * @author Chris Ray Created on 9:23:49 PM Nov 29, 2011
+	 */
+	public void setPlayers(LinkedList<Player> players) {
+		this.players = players;
 	}
 }

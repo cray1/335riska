@@ -121,10 +121,9 @@ public class Territory {
 			int remove = getUnitsOnTerritory() - unit;
 			if (remove > 0)
 				setUnitsOnTerritory(getUnitsOnTerritory() - unit);
-			else {
+			else
 				setUnitsOnTerritory(0);
-				setOwner(null);
-			}
+			// setOwner(null);
 			return true;
 		} catch (Exception e) {
 			System.err.print("Remove Failed");
