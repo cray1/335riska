@@ -135,109 +135,121 @@ public class Game extends CommandInterface {
 	 */
 	public boolean attackTerritory(Player p, Territory origin,
 			Territory destination, int attackingDice) {
-		List<Integer> diceA = new ArrayList<Integer>();// attacker's dice
-		List<Integer> diceD = new ArrayList<Integer>();// defender's dice
-		List<Die> attDice = new ArrayList<Die>();
-		Die a1 = new Die();
-		Die a2 = new Die();
-		Die a3 = new Die();
-		attDice.add(a1);
-		attDice.add(a2);
-		attDice.add(a3);
-		List<Die> defDice = new ArrayList<Die>();
-		Die d1 = new Die();
-		Die d2 = new Die();
-		defDice.add(d1);
-		defDice.add(d2);
+		// Check to see if the two territories are neighbors first, if not,
+		// nothing happens, Attack Fails.
+		if (origin.getNeighbors().contains(destination)) {
+			List<Integer> diceA = new ArrayList<Integer>();// attacker's dice
+			List<Integer> diceD = new ArrayList<Integer>();// defender's dice
+			List<Die> attDice = new ArrayList<Die>();
+			Die a1 = new Die();
+			Die a2 = new Die();
+			Die a3 = new Die();
+			attDice.add(a1);
+			attDice.add(a2);
+			attDice.add(a3);
+			List<Die> defDice = new ArrayList<Die>();
+			Die d1 = new Die();
+			Die d2 = new Die();
+			defDice.add(d1);
+			defDice.add(d2);
 
-		Iterator<Die> aD = attDice.iterator();
-		Iterator<Die> dD = defDice.iterator();
+			Iterator<Die> aD = attDice.iterator();
+			Iterator<Die> dD = defDice.iterator();
 
-		int defenders = destination.getUnitsOnTerritory();
-		if (defenders > 2)
-			defenders = 2;
-		Die temp;
-		if ((origin.getOwner() == p.getTeam())
-				&& (attackingDice < origin.getUnitsOnTerritory())
-				&& (attackingDice < 4))
-		// the attacking territory must be the player's, and there has to be at
-		// least
-		// one unit left on the original territory. Also max of 3 attacking Dice
-		{
-			int remainingArmy = attackingDice;// records the beginning and
-												// ending number of attacking
-												// units
-			for (int n = 0; n < attackingDice; n++)// makes a die roll for each
-													// attacking unit
+			int defenders = destination.getUnitsOnTerritory();
+			if (defenders > 2)
+				defenders = 2;
+			Die temp;
+			if ((origin.getOwner() == p.getTeam())
+					&& (attackingDice < origin.getUnitsOnTerritory())
+					&& (attackingDice < 4))
+			// the attacking territory must be the player's, and there has to be
+			// at
+			// least
+			// one unit left on the original territory. Also max of 3 attacking
+			// Dice
 			{
-				temp = aD.next();
-				temp.initiateRoll();
-				diceA.add(temp.getRoll());
-			}
-			Collections.sort(diceA, Collections.reverseOrder());// sorts in
-																// descending
-																// order
-			for (int n = 0; n < defenders; n++)// makes a die roll for each
-												// defending unit
-			{
-				temp = dD.next();
-				temp.initiateRoll();
-				diceD.add(temp.getRoll());
-			}
-			Collections.sort(diceD, Collections.reverseOrder());
-
-			Iterator<Integer> att = diceA.iterator();// iterators for attacking
-														// and defending dice,
-														// resp.
-			Iterator<Integer> def = diceD.iterator();
-
-			while ((att.hasNext()) && (def.hasNext()))// only goes for the
-														// lesser number of dice
-			{
-				Integer attackNum = att.next();
-				Integer defNum = def.next();
-
-				if (attackNum > defNum)
-					destination.removeUnits(1);
-				else
-					origin.removeUnits(1);
-			}
-			// capture:
-			if (destination.getUnitsOnTerritory() == 0) {
-
-				// find destination's owner player
-				Iterator<Player> playersItr = players.iterator();
-				Player current = new Player(null);
-				while (playersItr.hasNext()) {
-					current = playersItr.next();
-					if (current.getTeam() == destination.getOwner())
-						break;
+				int remainingArmy = attackingDice;// records the beginning and
+													// ending number of
+													// attacking
+													// units
+				for (int n = 0; n < attackingDice; n++)// makes a die roll for
+														// each
+														// attacking unit
+				{
+					temp = aD.next();
+					temp.initiateRoll();
+					diceA.add(temp.getRoll());
 				}
-				current.setNumberOfTerritories(current.getNumberOfTerritories() - 1);
-				// check if current has no territories
-				if (current.getNumberOfTerritories() == 0) {
-					// give his or her cards to player p
-					p.getCards().addAll(current.getCards());
-
-					// remove current from players List
-					players.remove(current);
-					/*
-					 * while(p.getCards().size()>4) { //request turn in cards
-					 * from GUI }
-					 */
-					this.notifyObservers(players);
-
+				Collections.sort(diceA, Collections.reverseOrder());// sorts in
+																	// descending
+																	// order
+				for (int n = 0; n < defenders; n++)// makes a die roll for each
+													// defending unit
+				{
+					temp = dD.next();
+					temp.initiateRoll();
+					diceD.add(temp.getRoll());
 				}
-				if (firstTerritory) {
-					// add card
-					drawCard(p);
-					firstTerritory = false;
+				Collections.sort(diceD, Collections.reverseOrder());
+
+				Iterator<Integer> att = diceA.iterator();// iterators for
+															// attacking
+															// and defending
+															// dice,
+															// resp.
+				Iterator<Integer> def = diceD.iterator();
+
+				while ((att.hasNext()) && (def.hasNext()))// only goes for the
+															// lesser number of
+															// dice
+				{
+					Integer attackNum = att.next();
+					Integer defNum = def.next();
+
+					if (attackNum > defNum)
+						destination.removeUnits(1);
+					else
+						origin.removeUnits(1);
 				}
-				move(p, origin, destination, remainingArmy);
-				updateMove(p, origin, destination);
+				// capture:
+				if (destination.getUnitsOnTerritory() == 0) {
+
+					// find destination's owner player
+					Iterator<Player> playersItr = players.iterator();
+					Player current = new Player(null);
+					while (playersItr.hasNext()) {
+						current = playersItr.next();
+						if (current.getTeam() == destination.getOwner())
+							break;
+					}
+					current.setNumberOfTerritories(current
+							.getNumberOfTerritories() - 1);
+					// check if current has no territories
+					if (current.getNumberOfTerritories() == 0) {
+						// give his or her cards to player p
+						p.getCards().addAll(current.getCards());
+
+						// remove current from players List
+						players.remove(current);
+						/*
+						 * while(p.getCards().size()>4) { //request turn in
+						 * cards from GUI }
+						 */
+						this.notifyObservers(players);
+
+					}
+					if (firstTerritory) {
+						// add card
+						drawCard(p);
+						firstTerritory = false;
+					}
+					move(p, origin, destination, remainingArmy);
+					updateMove(p, origin, destination);
+				}
+
+				return true;
 			}
-
-			return true;
 		}
 		return false;
 	}
@@ -254,31 +266,33 @@ public class Game extends CommandInterface {
 	public boolean move(Player p, Territory orig, Territory dest,
 			int numOfUnitsToMove) {
 		try {
+			// Check to see if the two territories are neighbors first, if not,
+			// nothing happens, Move Fails.
+			if (orig.getNeighbors().contains(dest))
+				if ((orig.getOwner() == p.getTeam())
+						&& ((orig.getUnitsOnTerritory() > 1) && (numOfUnitsToMove < orig
+								.getUnitsOnTerritory())))
+					if ((dest.getUnitsOnTerritory() <= 0)
+							|| (dest.getOwner() == p.getTeam())) {
 
-			if ((orig.getOwner() == p.getTeam())
-					&& ((orig.getUnitsOnTerritory() > 1) && (numOfUnitsToMove < orig
-							.getUnitsOnTerritory())))
-				if ((dest.getUnitsOnTerritory() <= 0)
-						|| (dest.getOwner() == p.getTeam())) {
+						// move is valid...proceed.
 
-					// move is valid...proceed.
-
-					// if numberOfUnitsToMove > orig.getUnitsOnTerritory()
-					// move orig.getUnitsOnTerritory()-1 units
-					if (numOfUnitsToMove > orig.getUnitsOnTerritory()) {
-						orig.setUnitsOnTerritory(1);
-						dest.setUnitsOnTerritory(orig.getUnitsOnTerritory() - 1);
-					} else {
-						orig.setUnitsOnTerritory(orig.getUnitsOnTerritory()
-								- numOfUnitsToMove);
-						dest.setUnitsOnTerritory(dest.getUnitsOnTerritory()
-								+ numOfUnitsToMove);
+						// if numberOfUnitsToMove > orig.getUnitsOnTerritory()
+						// move orig.getUnitsOnTerritory()-1 units
+						if (numOfUnitsToMove > orig.getUnitsOnTerritory()) {
+							orig.setUnitsOnTerritory(1);
+							dest.setUnitsOnTerritory(orig.getUnitsOnTerritory() - 1);
+						} else {
+							orig.setUnitsOnTerritory(orig.getUnitsOnTerritory()
+									- numOfUnitsToMove);
+							dest.setUnitsOnTerritory(dest.getUnitsOnTerritory()
+									+ numOfUnitsToMove);
+						}
+						this.notifyObservers(orig);
+						this.notifyObservers(dest);
+						updateMove(p, orig, dest);
+						return true;
 					}
-					this.notifyObservers(orig);
-					this.notifyObservers(dest);
-					updateMove(p, orig, dest);
-					return true;
-				}
 			return false;
 		} catch (Exception e) {
 
