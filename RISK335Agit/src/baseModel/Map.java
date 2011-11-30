@@ -591,6 +591,9 @@ public class Map {
 
 		for (Territory t : ter)
 			stringHash.put(t.toString(), t);
+		
+		//Temp, just to avoid the NPE when clicking "water"
+		stringHash.put("", new Territory("", null));
 		return stringHash;
 	}
 

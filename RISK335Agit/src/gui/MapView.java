@@ -102,6 +102,7 @@ public class MapView extends MasterViewPanel{
 //			System.out.println(e.getX() + "," + e.getY() + " COLOR: " + buffImage.getRGB(e.getX(), e.getY()));
 			//calls helper method designed to check which area is being clicked based on coordinates and color
 //			System.out.println(getLocation(e.getX(), e.getY()));
+						
 			System.out.println(territories.get(getLocation(e.getX(), e.getY())).toString());
 			}
 		}
@@ -335,7 +336,7 @@ public class MapView extends MasterViewPanel{
 			return "Yakutsk";
 		}
 		
-		return null;
+		return "";
 		
 	}
 	
