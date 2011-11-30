@@ -33,7 +33,7 @@ public class MasterView extends javax.swing.JFrame {
 	
 	private void setUpGUICode(){
 		this.setSize(1220, 980); //680
-		this.setResizable(false);
+//		this.setResizable(false);
 		setLocation(10,10);
 		setTitle("Risk");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
