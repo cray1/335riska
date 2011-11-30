@@ -58,6 +58,7 @@ public class Game extends CommandInterface {
 	public boolean turnInCards(Player p, ArrayList<TerritoryCard> cardsTurningIn) {
 		if ((cardsTurningIn.size() == 3) && isValidTurnin(cardsTurningIn)) {
 			p.getCards().removeAll(cardsTurningIn);
+			this.notifyObservers(p);
 			return true;
 		} else
 			return true;
@@ -67,7 +68,6 @@ public class Game extends CommandInterface {
 		// 2 and a wildcard or 1 and 2 wildcards
 		if (cards.contains(CardType.WILDCARD) && (cards.size() == 3))
 			return true;
-		// 3 of a kind
 		else if ((cards.get(0).getCardType() == cards.get(1).getCardType())
 				&& (cards.get(1).getCardType() == cards.get(2).getCardType()))
 			return true;
