@@ -18,6 +18,7 @@ public class Game extends CommandInterface {
 	private CardDeck deck;
 	private int unitMultiplier;
 	private Map map;
+	private Boolean firstTerritory;
 
 	/**
 	 * 
@@ -28,6 +29,7 @@ public class Game extends CommandInterface {
 		deck = new CardDeck();
 		unitMultiplier = 4;
 		setMap(new Map());
+		firstTerritory = true;
 	}
 
 	/*
@@ -196,8 +198,15 @@ public class Game extends CommandInterface {
 				else
 					origin.removeUnits(1);
 			}
-			if (destination.getUnitsOnTerritory() == 0)
+			// capture:
+			if (destination.getUnitsOnTerritory() == 0) {
 				move(p, origin, destination, remainingArmy);
+				if (firstTerritory) {
+					// add card
+					drawCard(p);
+					firstTerritory = false;
+				}
+			}
 
 			return true;
 		}
@@ -225,11 +234,17 @@ public class Game extends CommandInterface {
 
 					// move is valid...proceed.
 
-					// if numberOfUnitsToMove >
-					orig.setUnitsOnTerritory(orig.getUnitsOnTerritory()
-							- numOfUnitsToMove);
-					dest.setUnitsOnTerritory(dest.getUnitsOnTerritory()
-							+ numOfUnitsToMove);
+					// if numberOfUnitsToMove > orig.getUnitsOnTerritory()
+					// move orig.getUnitsOnTerritory()-1 units
+					if (numOfUnitsToMove > orig.getUnitsOnTerritory()) {
+						orig.setUnitsOnTerritory(1);
+						dest.setUnitsOnTerritory(orig.getUnitsOnTerritory() - 1);
+					} else {
+						orig.setUnitsOnTerritory(orig.getUnitsOnTerritory()
+								- numOfUnitsToMove);
+						dest.setUnitsOnTerritory(dest.getUnitsOnTerritory()
+								+ numOfUnitsToMove);
+					}
 					this.notifyObservers(orig);
 					this.notifyObservers(dest);
 					return true;
