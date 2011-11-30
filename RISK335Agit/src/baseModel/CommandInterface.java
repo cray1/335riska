@@ -5,6 +5,7 @@
  */
 package baseModel;
 
+import java.util.ArrayList;
 import java.util.Observable;
 
 /**
@@ -38,10 +39,12 @@ public abstract class CommandInterface extends Observable {
 	/**
 	 * @author Chris Ray Created on 8:26:32 PM Nov 26, 2011
 	 * @param p
+	 * @param cardsTurningIn
 	 * @return
 	 * 
 	 */
-	public abstract boolean turnInCards(Player p);
+	public abstract boolean turnInCards(Player p,
+			ArrayList<TerritoryCard> cardsTurningIn);
 
 	/**
 	 * @author Chris Ray Created on 8:26:34 PM Nov 26, 2011

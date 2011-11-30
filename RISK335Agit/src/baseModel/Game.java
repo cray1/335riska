@@ -55,64 +55,30 @@ public class Game extends CommandInterface {
 	 * @author Chris Ray Created on 8:27:35 PM Nov 26, 2011
 	 */
 	@Override
-	public boolean turnInCards(Player p) {
-		ArrayList<TerritoryCard> cards = p.getCards();
-		try {
+	public boolean turnInCards(Player p, ArrayList<TerritoryCard> cardsTurningIn) {
+		if ((cardsTurningIn.size() == 3) && isValidTurnin(cardsTurningIn)) {
+			p.getCards().removeAll(cardsTurningIn);
+			return true;
+		} else
+			return true;
+	}
 
-			if (cards.contains(CardType.CANNON)
-					&& cards.contains(CardType.HORSE)
-					&& cards.contains(CardType.SOLDIER)) {
-				p.setNewUnits(unitMultiplier);
-				unitMultiplierUp();
-				p.getCards().remove(CardType.CANNON);
-				p.getCards().remove(CardType.HORSE);
-				p.getCards().remove(CardType.SOLDIER);
-				this.notifyObservers(p.getCards());
-				return true;
-			} else if ((cards.contains(CardType.CANNON) && cards
-					.contains(CardType.HORSE))) {
-				if (cards.contains(CardType.WILDCARD)) {
-					p.setNewUnits(unitMultiplier);
-					unitMultiplierUp();
-					p.getCards().remove(CardType.CANNON);
-					p.getCards().remove(CardType.HORSE);
-					p.getCards().remove(CardType.WILDCARD);
-					this.notifyObservers(p.getCards());
-					return true;
-				} else
-					return false;
-			} else if (cards.contains(CardType.CANNON)
-					&& cards.contains(CardType.SOLDIER)) {
-				if (cards.contains(CardType.WILDCARD)) {
-					p.setNewUnits(unitMultiplier);
-					unitMultiplierUp();
-					p.getCards().remove(CardType.CANNON);
-					p.getCards().remove(CardType.SOLDIER);
-					p.getCards().remove(CardType.WILDCARD);
-					this.notifyObservers(p.getCards());
-					return true;
-				} else
-					return false;
-			} else if (cards.contains(CardType.HORSE)
-					&& cards.contains(CardType.SOLDIER))
-				if (cards.contains(CardType.WILDCARD)) {
-					p.setNewUnits(unitMultiplier);
-					unitMultiplierUp();
-					p.getCards().remove(CardType.HORSE);
-					p.getCards().remove(CardType.SOLDIER);
-					p.getCards().remove(CardType.WILDCARD);
-					this.notifyObservers(p.getCards());
-					return true;
-				} else
-					return false;
+	private boolean isValidTurnin(ArrayList<TerritoryCard> cards) {
+		// 2 and a wildcard or 1 and 2 wildcards
+		if (cards.contains(CardType.WILDCARD) && (cards.size() == 3))
+			return true;
+		// 3 of a kind
+		else if ((cards.get(0).getCardType() == cards.get(1).getCardType())
+				&& (cards.get(1).getCardType() == cards.get(2).getCardType()))
+			return true;
+		// 1 of each
+		else if (cards.contains(CardType.CANNON)
+				&& cards.contains(CardType.HORSE)
+				&& cards.contains(CardType.SOLDIER))
+			return true;
 
-		} catch (Exception e) {
-
-			// restore cards in case something goes wrong
-			p.getCards().removeAll(cards);
-			p.getCards().addAll(cards);
-		}
-		return false;
+		else
+			return false;
 	}
 
 	/*
@@ -169,7 +135,8 @@ public class Game extends CommandInterface {
 			if ((orig.getOwner() == p.getTeam())
 					&& ((orig.getUnitsOnTerritory() > 1) && (numOfUnitsToMove < orig
 							.getUnitsOnTerritory())))
-				if ((dest.getUnitsOnTerritory() <= 0) || (dest.getOwner() == p.getTeam())) {
+				if ((dest.getUnitsOnTerritory() <= 0)
+						|| (dest.getOwner() == p.getTeam())) {
 					orig.setUnitsOnTerritory(orig.getUnitsOnTerritory()
 							- numOfUnitsToMove);
 					dest.setUnitsOnTerritory(dest.getUnitsOnTerritory()
