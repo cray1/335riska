@@ -580,4 +580,84 @@ public class Map {
 		ter.addAll(getMap().get(as).getChildren());
 		return ter;
 	}
+
+	/**
+	 * @author Chris Ray Created on 10:52:03 PM Nov 29, 2011
+	 * 
+	 */
+	public HashMap<String, Territory> getMapAsStringTerritoryHashMap() {
+		ArrayList<Territory> ter = getTerritories();
+		HashMap<String, Territory> stringHash = new HashMap<String, Territory>();
+
+		for (Territory t : ter)
+			stringHash.put(t.toString(), t);
+		return stringHash;
+	}
+
+	/**
+	 * @author Chris Ray Created on 11:47:50 PM Nov 29, 2011 <br />
+	 * @return HashMap<Integer, Territory> matching colors to their respective
+	 *         territories
+	 * 
+	 * 
+	 */
+	public HashMap<Integer, Territory> getMapAsColorTerritoryHashMap() {
+		HashMap<Integer, Territory> cm = new HashMap<Integer, Territory>();
+		HashMap<String, Territory> sh = getMapAsStringTerritoryHashMap();
+
+		// north america
+		cm.put(-8355840, sh.get("Alaska"));
+		cm.put(-11513817, sh.get("North West Territory"));// duplicate color
+		cm.put(-256, sh.get("Alberta")); // duplicate color
+		cm.put(-7039927, sh.get("Ontario"));
+		cm.put(256, sh.get("Greenland")); // duplicate color
+		cm.put(-128, sh.get("Quebec"));// duplicate color
+		cm.put(8355840, sh.get("Eastern United States")); // duplicate color
+		cm.put(128, sh.get("Central America")); // duplicate color
+		cm.put(11513817, sh.get("Western United States")); // duplicate color
+
+		// South america
+		cm.put(-32640, sh.get("Venezuela"));
+		cm.put(-8388608, sh.get("Peru"));
+		cm.put(-8372160, sh.get("Brazil"));
+		cm.put(-65536, sh.get("Argentina"));
+
+		// africa
+		cm.put(-28325, sh.get("North Africa"));
+		cm.put(-8372224, sh.get("Egypt")); // duplicate color
+		cm.put(-32768, sh.get("East Africa"));
+		cm.put(-5351680, sh.get("Congo")); // duplicate color
+		cm.put(8372224, sh.get("South Africa")); // duplicate color
+		cm.put(5351680, sh.get("Madagascar")); // duplicate color
+
+		// Australia
+		cm.put(-8388353, sh.get("Indonesia"));
+		cm.put(-65281, sh.get("New Guinea"));
+		cm.put(-8388544, sh.get("Western Austrailia"));
+		cm.put(-12582848, sh.get("Eastern Austrailia"));
+
+		cm.put(-16776961, sh.get("Iceland"));// duplicate color
+		cm.put(-16760704, sh.get("Great Britain"));// duplicate color
+		cm.put(-16744193, sh.get("Scandinavia"));
+		cm.put(-16777088, sh.get("Ukraine"));
+		cm.put(16776961, sh.get("Northern Europe"));// duplicate color
+		cm.put(16776961, sh.get("Western Europe"));// duplicate color
+		cm.put(16760704, sh.get("Southern Europe"));// duplicate color
+
+		// Asia
+		cm.put(-16760832, sh.get("Ural")); // duplicate color
+		cm.put(-16744448, sh.get("Siberia"));// duplicate color
+		cm.put(-16744320, sh.get("Yakutsk"));// duplicate color
+		cm.put(-16744384, sh.get("Kamchatka"));// duplicate color
+		cm.put(-8323328, sh.get("Irkutsk")); // duplicate color
+		cm.put(16760832, sh.get("Mongolia"));// duplicate color
+		cm.put(8323328, sh.get("Japan"));// duplicate color
+		cm.put(-8323200, sh.get("Afghanistan"));// duplicate color
+		cm.put(16744384, sh.get("China"));// duplicate color
+		cm.put(16744448, sh.get("Middle East"));// duplicate color
+		cm.put(16744320, sh.get("India"));// duplicate color
+		cm.put(8323200, sh.get("Siam"));// duplicate color
+
+		return cm;
+	}
 }

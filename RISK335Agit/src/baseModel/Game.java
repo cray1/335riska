@@ -136,8 +136,7 @@ public class Game extends CommandInterface {
 	public boolean attackTerritory(Player p, Territory origin,
 			Territory destination, int attackingDice) {
 		List<Integer> diceA = new ArrayList<Integer>();// attacker's dice
-		List<Integer> diceD = new ArrayList<Integer>();
-		;// defender's dice
+		List<Integer> diceD = new ArrayList<Integer>();// defender's dice
 		List<Die> attDice = new ArrayList<Die>();
 		Die a1 = new Die();
 		Die a2 = new Die();
@@ -205,8 +204,6 @@ public class Game extends CommandInterface {
 			}
 			// capture:
 			if (destination.getUnitsOnTerritory() == 0) {
-				move(p, origin, destination, remainingArmy);
-				updateMove(p, origin, destination);
 
 				// find destination's owner player
 				Iterator<Player> playersItr = players.iterator();
@@ -236,6 +233,8 @@ public class Game extends CommandInterface {
 					drawCard(p);
 					firstTerritory = false;
 				}
+				move(p, origin, destination, remainingArmy);
+				updateMove(p, origin, destination);
 			}
 
 			return true;
