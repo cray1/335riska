@@ -6,7 +6,10 @@
 package baseModel;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * @author Chris Ray Created on 8:15:11 PM Nov 26, 2011
@@ -114,8 +117,90 @@ public class Game extends CommandInterface {
 	 * @author Chris Ray Created on 8:27:35 PM Nov 26, 2011
 	 */
 	@Override
-	public boolean attackTerritory(Player p, String destination, String origin) {
-		// TODO Auto-generated method stub
+	/**
+	 * the attack method 
+	 * 
+	 * @param p the player attacking
+	 * @param origin the territory the player is attacking from
+	 * @param destination the territory the player is attacking
+	 * @param attackingPieces the amount of units the player is attacking with
+	 * @author Stephen Brown at 6:17pm 11/29/11
+	 */
+	public boolean attackTerritory(Player p, Territory origin,
+			Territory destination, int attackingDice) {
+		List<Integer> diceA = new ArrayList<Integer>();// attacker's dice
+		List<Integer> diceD = new ArrayList<Integer>();
+		;// defender's dice
+		List<Die> attDice = new ArrayList<Die>();
+		Die a1 = new Die();
+		Die a2 = new Die();
+		Die a3 = new Die();
+		attDice.add(a1);
+		attDice.add(a2);
+		attDice.add(a3);
+		List<Die> defDice = new ArrayList<Die>();
+		Die d1 = new Die();
+		Die d2 = new Die();
+		defDice.add(d1);
+		defDice.add(d2);
+
+		Iterator<Die> aD = attDice.iterator();
+		Iterator<Die> dD = defDice.iterator();
+
+		int defenders = destination.getUnitsOnTerritory();
+		if (defenders > 2)
+			defenders = 2;
+		Die temp;
+		if ((origin.getOwner() == p.getTeam())
+				&& (attackingDice < origin.getUnitsOnTerritory())
+				&& (attackingDice < 4))
+		// the attacking territory must be the player's, and there has to be at
+		// least
+		// one unit left on the original territory. Also max of 3 attacking Dice
+		{
+			int remainingArmy = attackingDice;// records the beginning and
+												// ending number of attacking
+												// units
+			for (int n = 0; n < attackingDice; n++)// makes a die roll for each
+													// attacking unit
+			{
+				temp = aD.next();
+				temp.initiateRoll();
+				diceA.add(temp.getRoll());
+			}
+			Collections.sort(diceA, Collections.reverseOrder());// sorts in
+																// descending
+																// order
+			for (int n = 0; n < defenders; n++)// makes a die roll for each
+												// defending unit
+			{
+				temp = dD.next();
+				temp.initiateRoll();
+				diceD.add(temp.getRoll());
+			}
+			Collections.sort(diceD, Collections.reverseOrder());
+
+			Iterator<Integer> att = diceA.iterator();// iterators for attacking
+														// and defending dice,
+														// resp.
+			Iterator<Integer> def = diceD.iterator();
+
+			while ((att.hasNext()) && (def.hasNext()))// only goes for the
+														// lesser number of dice
+			{
+				Integer attackNum = att.next();
+				Integer defNum = def.next();
+
+				if (attackNum > defNum)
+					destination.removeUnits(1);
+				else
+					origin.removeUnits(1);
+			}
+			if (destination.getUnitsOnTerritory() == 0)
+				move(p, origin, destination, remainingArmy);
+
+			return true;
+		}
 		return false;
 	}
 
@@ -137,6 +222,10 @@ public class Game extends CommandInterface {
 							.getUnitsOnTerritory())))
 				if ((dest.getUnitsOnTerritory() <= 0)
 						|| (dest.getOwner() == p.getTeam())) {
+
+					// move is valid...proceed.
+
+					// if numberOfUnitsToMove >
 					orig.setUnitsOnTerritory(orig.getUnitsOnTerritory()
 							- numOfUnitsToMove);
 					dest.setUnitsOnTerritory(dest.getUnitsOnTerritory()
@@ -144,9 +233,8 @@ public class Game extends CommandInterface {
 					this.notifyObservers(orig);
 					this.notifyObservers(dest);
 					return true;
-				} else
-					return false;
-			return true;
+				}
+			return false;
 		} catch (Exception e) {
 
 			return false;

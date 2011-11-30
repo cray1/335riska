@@ -94,48 +94,44 @@ public class Territory {
 	 * 
 	 * @author Stephen 3:55pm 11/29/11
 	 */
-	public boolean addUnits(int u, Team t)
-	{
-		if (getUnitsOnTerritory() == 0)
-		{
+	public boolean addUnits(int u, Team t) {
+		if (getUnitsOnTerritory() == 0) {
 			setUnitsOnTerritory(u);
 			setOwner(t);
 			return true;
-		}
-		else if (getOwner() == t)
-		{
+		} else if (getOwner() == t) {
 			setUnitsOnTerritory(u + getUnitsOnTerritory());
 			return true;
 		}
 		return false;
 	}
-	
+
 	/**
 	 * 
 	 * @param territory
 	 * @param u
 	 * 
 	 * @author Stephen Brown at 3:52 11/29/11
+	 * @param unit
+	 * @return
 	 */
-	private boolean removeUnits(int unit)
-	{
-		try{
-			
-		int remove = getUnitsOnTerritory() - unit;
-		if (remove > 0)
-			setUnitsOnTerritory(getUnitsOnTerritory()-unit);
-		else 
-		{
-			setUnitsOnTerritory(0);
-			setOwner(null);
-		}
-		return true;
-		}catch(Exception e)
-		{
+	public boolean removeUnits(int unit) {
+		try {
+
+			int remove = getUnitsOnTerritory() - unit;
+			if (remove > 0)
+				setUnitsOnTerritory(getUnitsOnTerritory() - unit);
+			else {
+				setUnitsOnTerritory(0);
+				setOwner(null);
+			}
+			return true;
+		} catch (Exception e) {
 			System.err.print("Remove Failed");
 			return false;
 		}
 	}
+
 	/**
 	 * @return the neighbors
 	 * @author Chris Ray Created on 2:47:34 AM Nov 27, 2011

@@ -65,6 +65,6 @@ public abstract class CommandInterface extends Observable {
 	 * @return
 	 * 
 	 */
-	public abstract boolean attackTerritory(Player p, String destination,
-			String origin);
+	public abstract boolean attackTerritory(Player p, Territory origin,
+			Territory destination, int attackingDice);
 }
