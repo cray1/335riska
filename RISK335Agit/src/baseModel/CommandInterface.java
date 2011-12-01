@@ -84,4 +84,5 @@ public abstract class CommandInterface extends Observable {
 	 */
 	public abstract boolean attackTerritory(Player p, Territory origin,
 			Territory destination, int numOfAttackingDice);
+
 }

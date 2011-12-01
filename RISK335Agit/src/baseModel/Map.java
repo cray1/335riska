@@ -94,12 +94,9 @@ public class Map {
 		setUpNeighborsOfTerritories();
 		buildContinents();
 		buildMap();
-		
+
 		ArrayList<Territory> naTerritories = new ArrayList<Territory>();
 		naTerritories.add(alaska);
-		Continent nAmerica = new Continent("North America", naTerritories, 5);
-
-		// setMap(new HashMap<String, Continent>());
 
 	}
 
@@ -583,6 +580,8 @@ public class Map {
 
 	/**
 	 * @author Chris Ray Created on 10:52:03 PM Nov 29, 2011
+	 * @return HashMap<String, Territory> matching strings to their repspective
+	 *         territories
 	 * 
 	 */
 	public HashMap<String, Territory> getMapAsStringTerritoryHashMap() {
@@ -591,9 +590,14 @@ public class Map {
 
 		for (Territory t : ter)
 			stringHash.put(t.toString(), t);
-		
-		//Temp, just to avoid the NPE when clicking "water"
+
+		/**
+		 * Temp, just to avoid the NPE when clicking "water"
+		 * 
+		 * @author AJ Venne
+		 */
 		stringHash.put("", new Territory("", null));
+
 		return stringHash;
 	}
 
