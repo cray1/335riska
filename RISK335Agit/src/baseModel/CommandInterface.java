@@ -61,6 +61,10 @@ public abstract class CommandInterface extends Observable {
 			ArrayList<TerritoryCard> cardsTurningIn);
 
 	/**
+	 * This is only for when you are placing the first unit on a territory
+	 * (during the special placement phase at the beginning of the game where
+	 * all the players are placing their initial units) <br />
+	 * 
 	 * @author Chris Ray Created on 8:26:34 PM Nov 26, 2011
 	 * @param p
 	 * @param territory
