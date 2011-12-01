@@ -75,7 +75,7 @@ public class MasterView extends javax.swing.JFrame {
 
 		@Override
 		public void menuSelected(MenuEvent e) {
-			JOptionPane.showMessageDialog(null, "Risk \nCreated by:\nSteven Brown\nChristopher Ray\nRyan Robinson\nAndrew Venne - GUI");
+			JOptionPane.showMessageDialog(null, "Risk \nCreated by:\nStephen Brown\nChristopher Ray\nRyan Robinson\nAndrew Venne - GUI");
 			
 		}
 		
