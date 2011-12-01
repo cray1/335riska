@@ -56,6 +56,7 @@ public class Game extends CommandInterface {
 		try {
 			p.getCards().add(deck.drawCard());
 			this.notifyObservers(p);
+			this.notifyObservers(deck);
 			return true;
 		} catch (Exception e) {
 			System.out.println("Draw card was unsuccessful");
@@ -226,6 +227,13 @@ public class Game extends CommandInterface {
 					updateMove(p, orig, dest);
 				}
 
+				/**
+				 * @author Chris Ray 12/01/11 1:53 AM
+				 */
+				this.notifyObservers(p);
+				this.notifyObservers(orig);
+				this.notifyObservers(dest);
+
 				return true;
 			}
 		}
@@ -268,6 +276,7 @@ public class Game extends CommandInterface {
 						}
 						this.notifyObservers(orig);
 						this.notifyObservers(dest);
+						this.notifyObservers(p);
 						updateMove(p, orig, dest);
 						return true;
 					}
@@ -315,6 +324,7 @@ public class Game extends CommandInterface {
 				returnDice.add(attackDice.get(i));
 			}
 		this.attackDice = returnDice;
+		this.notifyObservers(this.attackDice);
 	}
 
 	/**
@@ -326,6 +336,7 @@ public class Game extends CommandInterface {
 	private void rollDefendDice() {
 		for (Die d : defendDice)
 			d.initiateRoll();
+		this.notifyObservers(this.defendDice);
 	}
 
 	/**
