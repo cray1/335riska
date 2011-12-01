@@ -22,6 +22,8 @@ public class Game extends CommandInterface {
 	private Boolean firstTerritory;
 	private Move move;
 	private LinkedList<Player> players;
+	private ArrayList<Die> defendDice;
+	private ArrayList<Die> attackDice;
 
 	/**
 	 * 
@@ -35,6 +37,11 @@ public class Game extends CommandInterface {
 		firstTerritory = true;
 		move = new Move();
 		setPlayers(new LinkedList<Player>());
+
+		// defend Dice
+		defendDice = new ArrayList<Die>();
+		// attack Dice
+		attackDice = new ArrayList<Die>();
 	}
 
 	/*
@@ -147,97 +154,63 @@ public class Game extends CommandInterface {
 	 * @param attackingPieces the amount of units the player is attacking with
 	 * @author Stephen Brown at 6:17pm 11/29/11
 	 */
-	public boolean attackTerritory(Player p, Territory origin,
-			Territory destination, int attackingDice) {
+	public boolean attackTerritory(Player p, Territory orig,
+			Territory dest, int numOfAttackingDice) {
 		// Check to see if the two territories are neighbors first, if not,
 		// nothing happens, Attack Fails.
-		if (origin.getNeighbors().contains(destination)) {
-			List<Integer> diceA = new ArrayList<Integer>();// attacker's dice
-			List<Integer> diceD = new ArrayList<Integer>();// defender's dice
-			List<Die> attDice = new ArrayList<Die>();
-			Die a1 = new Die();
-			Die a2 = new Die();
-			Die a3 = new Die();
-			attDice.add(a1);
-			attDice.add(a2);
-			attDice.add(a3);
-			List<Die> defDice = new ArrayList<Die>();
-			Die d1 = new Die();
-			Die d2 = new Die();
-			defDice.add(d1);
-			defDice.add(d2);
+		if (orig.getNeighbors().contains(dest)) {
 
-			Iterator<Die> aD = attDice.iterator();
-			Iterator<Die> dD = defDice.iterator();
-
-			int defenders = destination.getUnitsOnTerritory();
+			int defenders = dest.getUnitsOnTerritory();
 			if (defenders > 2)
 				defenders = 2;
-			Die temp;
-			if ((origin.getOwner() == p.getTeam())
-					&& (attackingDice < origin.getUnitsOnTerritory())
-					&& (attackingDice < 4))
+
 			// the attacking territory must be the player's, and there has to be
-			// at
-			// least
-			// one unit left on the original territory. Also max of 3 attacking
-			// Dice
-			{
-				int remainingArmy = attackingDice;// records the beginning and
-													// ending number of
-													// attacking
-													// units
-				for (int n = 0; n < attackingDice; n++)// makes a die roll for
-														// each
-														// attacking unit
-				{
-					temp = aD.next();
-					temp.initiateRoll();
-					diceA.add(temp.getRoll());
-				}
-				Collections.sort(diceA, Collections.reverseOrder());// sorts in
-																	// descending
-																	// order
-				for (int n = 0; n < defenders; n++)// makes a die roll for each
-													// defending unit
-				{
-					temp = dD.next();
-					temp.initiateRoll();
-					diceD.add(temp.getRoll());
-				}
-				Collections.sort(diceD, Collections.reverseOrder());
+			// at least one unit left on the original territory.
+			// Also max of 3 attacking Dice
+			if ((orig.getOwner() == p.getTeam())
+					&& (numOfAttackingDice < orig.getUnitsOnTerritory())
+					&& (numOfAttackingDice < 4) && (numOfAttackingDice >= 1)) {
+				// records the beginning and ending number of attacking units
+				int remainingArmy = numOfAttackingDice;
 
-				Iterator<Integer> att = diceA.iterator();// iterators for
-															// attacking
-															// and defending
-															// dice,
-															// resp.
-				Iterator<Integer> def = diceD.iterator();
+				rollAttackDice(numOfAttackingDice);
+				// Sorts in descending order
+				Collections.sort(this.getAttackDice(),
+						Collections.reverseOrder());
 
-				while ((att.hasNext()) && (def.hasNext()))// only goes for the
-															// lesser number of
-															// dice
-				{
-					Integer attackNum = att.next();
-					Integer defNum = def.next();
+				rollDefendDice();
+				// Sorts in descending order
+				Collections.sort(this.getDefendDice(),
+						Collections.reverseOrder());
 
-					if (attackNum > defNum)
-						destination.removeUnits(1);
+				// iterators for attacking and defending dice, resp.
+				Iterator<Die> attackingDice = this.getAttackDice().iterator();
+				Iterator<Die> defendingDice = this.getDefendDice().iterator();
+
+				// Only goes for the lesser number of dice.
+				while ((attackingDice.hasNext()) && (defendingDice.hasNext())) {
+					Die attackingDie = attackingDice.next();
+					Die defendingDie = defendingDice.next();
+
+					// Die is now comparable...thus no need to compare their
+					// rolls, you can just compare themselves directly
+					if (attackingDie.compareTo(defendingDie) > 0)
+						dest.removeUnits(1);
 					else
-						origin.removeUnits(1);
+						orig.removeUnits(1);
 				}
 				// capture:
-				if (destination.getUnitsOnTerritory() == 0) {
+				if (dest.getUnitsOnTerritory() == 0) {
 
 					// find destination's owner player
 					Iterator<Player> playersItr = players.iterator();
 					Player current = new Player(null);
 					while (playersItr.hasNext()) {
 						current = playersItr.next();
-						if (current.getTeam() == destination.getOwner())
+						if (current.getTeam() == dest.getOwner())
 							break;
 					}
-					current.getTerritoriesOwned().remove(destination);
+					current.getTerritoriesOwned().remove(dest);
 					// check if current has no territories
 					if (current.getNumberOfTerritories() == 0) {
 						// give his or her cards to player p
@@ -257,8 +230,8 @@ public class Game extends CommandInterface {
 						drawCard(p);
 						firstTerritory = false;
 					}
-					move(p, origin, destination, remainingArmy);
-					updateMove(p, origin, destination);
+					move(p, orig, dest, remainingArmy);
+					updateMove(p, orig, dest);
 				}
 
 				return true;
@@ -325,11 +298,42 @@ public class Game extends CommandInterface {
 
 	}
 
+	/**
+	 * 
+	 * @author Chris Ray Created on 6:42:19 PM Nov 30, 2011
+	 * 
+	 */
 	private void unitMultiplierUp() {
 		if (unitMultiplier < 10)
 			unitMultiplier += 2;
 		else
 			unitMultiplier += 5;
+	}
+
+	/**
+	 * 
+	 * @author Chris Ray Created on 6:42:24 PM Nov 30, 2011
+	 * 
+	 */
+	private void rollAttackDice(int numOfDiceToRoll) {
+		ArrayList<Die> returnDice = new ArrayList<Die>();
+		if ((numOfDiceToRoll <= 3) && (numOfDiceToRoll >= 1))
+			for (int i = 0; i < numOfDiceToRoll; i++) {
+				attackDice.get(i).initiateRoll();
+				returnDice.add(attackDice.get(i));
+			}
+		this.attackDice = returnDice;
+	}
+
+	/**
+	 * 
+	 * @author Chris Ray Created on 6:41:38 PM Nov 30, 2011 <br />
+	 *         Assumes always will be rolling 2 dice
+	 * 
+	 */
+	private void rollDefendDice() {
+		for (Die d : defendDice)
+			d.initiateRoll();
 	}
 
 	/**
@@ -382,4 +386,29 @@ public class Game extends CommandInterface {
 	public void setPlayers(LinkedList<Player> players) {
 		this.players = players;
 	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see baseModel.CommandInterface#getDefendDice()
+	 * 
+	 * @author Chris Ray Created on 5:36:45 PM Nov 30, 2011
+	 */
+	@Override
+	public ArrayList<Die> getDefendDice() {
+		return this.defendDice;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see baseModel.CommandInterface#getAttackDice()
+	 * 
+	 * @author Chris Ray Created on 5:36:45 PM Nov 30, 2011
+	 */
+	@Override
+	public ArrayList<Die> getAttackDice() {
+		return this.attackDice;
+	}
+
 }
