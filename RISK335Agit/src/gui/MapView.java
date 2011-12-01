@@ -7,6 +7,8 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
+import java.util.Observable;
+import java.util.Observer;
 
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
@@ -23,7 +25,7 @@ import baseModel.Territory;
 
 
 
-public class MapView extends MasterViewPanel{
+public class MapView extends MasterViewPanel implements Observer{
 	BufferedImage buffImage;
 	Game newGame;
 	Map gameMap;
@@ -81,17 +83,20 @@ public class MapView extends MasterViewPanel{
 		gameMap = newGame.getMap();
 		continents = gameMap.getMap();
 		territories = gameMap.getMapAsStringTerritoryHashMap();
-		na = continents.get("North America").getChildrenAsHashMap();
-		sa = continents.get("South America").getChildrenAsHashMap();
-		afr = continents.get("Africa").getChildrenAsHashMap();
-		eur = continents.get("Europe").getChildrenAsHashMap();
-		aus = continents.get("Australia").getChildrenAsHashMap();
-		asia = continents.get("Asia").getChildrenAsHashMap();
+		
 	}
 	
 	public void paintComponent(Graphics g){
 		
-//		mapImage = mapImage.getScaledInstance(this.getWidth(), this.getHeight(), 2);
+		
+		//TO DO: Working on making these flags appear over/on every owned territory on repaint, gonna make them small to fit new map better.
+		territories.get("Alaska").setOwner(Team.GREEN);
+		if(territories.get("Alaska").getOwner() != null){
+			 g.drawImage(new ImageIcon("images/greenflag.png").getImage(), 800, 16, m);
+		}
+			
+		
+		
 
 	}
 	private class mouse implements MouseListener{
@@ -99,7 +104,7 @@ public class MapView extends MasterViewPanel{
 		@Override
 		public void mouseClicked(MouseEvent e) {
 			if(e.getX() < buffImage.getWidth() && e.getY() < buffImage.getHeight()){
-//			System.out.println(e.getX() + "," + e.getY() + " COLOR: " + buffImage.getRGB(e.getX(), e.getY()));
+			System.out.println(e.getX() + "," + e.getY() + " COLOR: " + buffImage.getRGB(e.getX(), e.getY()));
 			//calls helper method designed to check which area is being clicked based on coordinates and color
 //			System.out.println(getLocation(e.getX(), e.getY()));
 						
@@ -127,7 +132,8 @@ public class MapView extends MasterViewPanel{
 		@Override
 		public void mouseReleased(MouseEvent e) {
 			// TODO Auto-generated method stub
-			
+
+
 		}
 		
 	}
@@ -337,6 +343,11 @@ public class MapView extends MasterViewPanel{
 		}
 		
 		return "";
+		
+	}
+	@Override
+	public void update(Observable arg0, Object arg1) {
+		// TODO Auto-generated method stub
 		
 	}
 	
