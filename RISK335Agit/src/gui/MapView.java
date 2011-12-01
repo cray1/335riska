@@ -46,7 +46,7 @@ public class MapView extends MasterViewPanel{
 		this.setVisible(true);
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		
-		mapImage = new ImageIcon("images/map.png").getImage();
+		mapImage = new ImageIcon("images/map2.png").getImage();
 		buffImage = new BufferedImage(mapImage.getWidth(null),mapImage.getHeight(null),BufferedImage.TYPE_INT_ARGB);
 		
 		

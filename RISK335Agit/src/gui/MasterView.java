@@ -3,8 +3,11 @@ package gui;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -30,9 +33,9 @@ public class MasterView extends javax.swing.JFrame {
 		setUpBody();
 		changeView(Views.TITLE, null);
 	}
-	
+	Image mapImage = new ImageIcon("images/map2.png").getImage();
 	private void setUpGUICode(){
-		this.setSize(1220, 980); //680
+		this.setSize(mapImage.getWidth(null), mapImage.getHeight(null) + 80); //680
 //		this.setResizable(false);
 		setLocation(10,10);
 		setTitle("Risk");
