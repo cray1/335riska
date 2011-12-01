@@ -42,6 +42,8 @@ public class Game extends CommandInterface {
 		defendDice = new ArrayList<Die>();
 		// attack Dice
 		attackDice = new ArrayList<Die>();
+		players = new LinkedList<Player>();
+
 	}
 
 	/*
