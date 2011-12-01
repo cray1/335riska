@@ -72,7 +72,8 @@ public abstract class CommandInterface extends Observable {
 			Territory territory);
 
 	/**
-	 * @author Chris Ray Created on 8:26:37 PM Nov 26, 2011
+	 * @author Stephen Brown at 6:17pm 11/29/11, Christopher Ray (Dice changes
+	 *         only) 11/30/11 7:26 PM
 	 * @param p
 	 * @param destination
 	 * @param origin

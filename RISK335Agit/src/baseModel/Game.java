@@ -142,20 +142,12 @@ public class Game extends CommandInterface {
 	 * @see baseModel.CommandInterface#attackTerritory(baseModel.Player,
 	 * java.lang.String, java.lang.String)
 	 * 
-	 * @author Chris Ray Created on 8:27:35 PM Nov 26, 2011
+	 * @author Stephen Brown at 6:17pm 11/29/11, Christopher Ray (Dice changes
+	 * only) 11/30/11 7:26 PM
 	 */
 	@Override
-	/**
-	 * the attack method 
-	 * 
-	 * @param p the player attacking
-	 * @param origin the territory the player is attacking from
-	 * @param destination the territory the player is attacking
-	 * @param attackingPieces the amount of units the player is attacking with
-	 * @author Stephen Brown at 6:17pm 11/29/11
-	 */
-	public boolean attackTerritory(Player p, Territory orig,
-			Territory dest, int numOfAttackingDice) {
+	public boolean attackTerritory(Player p, Territory orig, Territory dest,
+			int numOfAttackingDice) {
 		// Check to see if the two territories are neighbors first, if not,
 		// nothing happens, Attack Fails.
 		if (orig.getNeighbors().contains(dest)) {
@@ -409,6 +401,23 @@ public class Game extends CommandInterface {
 	@Override
 	public ArrayList<Die> getAttackDice() {
 		return this.attackDice;
+	}
+
+	/**
+	 * @return the unitMultiplier
+	 * @author Chris Ray Created on 7:24:23 PM Nov 30, 2011
+	 */
+	public int getUnitMultiplier() {
+		return unitMultiplier;
+	}
+
+	/**
+	 * @param unitMultiplier
+	 *            the unitMultiplier to set
+	 * @author Chris Ray Created on 7:24:23 PM Nov 30, 2011
+	 */
+	public void resetUnitMultiplier() {
+		this.unitMultiplier = 4;
 	}
 
 }
