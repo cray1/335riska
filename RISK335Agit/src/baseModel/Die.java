@@ -10,7 +10,7 @@ import java.util.Random;
 /**
  * @author Chris Ray Created on 7:25:14 PM Nov 25, 2011
  */
-public class Die {// test
+public class Die implements Comparable<Die> {// test
 	private int roll;
 
 	/**
@@ -38,4 +38,17 @@ public class Die {// test
 	public final int getRoll() {
 		return roll;
 	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Comparable#compareTo(java.lang.Object)
+	 * 
+	 * @author Chris Ray Created on 7:01:13 PM Nov 30, 2011
+	 */
+	@Override
+	public int compareTo(Die d) {
+		return (((Integer) this.getRoll()).compareTo(d.getRoll()));
+	}
+
 }

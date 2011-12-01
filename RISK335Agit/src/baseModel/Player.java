@@ -18,6 +18,7 @@ public class Player {
 							// this turn
 	private Team team;
 	private ArrayList<TerritoryCard> cards;
+	private ArrayList<Territory> territoriesOwned;
 
 	/**
 	 * @param t
@@ -30,6 +31,7 @@ public class Player {
 		numberOfTerritories = 0;
 		newUnits = 0;
 		cards = new ArrayList<TerritoryCard>();
+		territoriesOwned = new ArrayList<Territory>();
 	}
 
 	/**
@@ -45,7 +47,7 @@ public class Player {
 	 * @author Chris Ray Created on 6:21:00 PM Nov 25, 2011
 	 */
 	public int getNumberOfTerritories() {
-		return numberOfTerritories;
+		return this.getTerritoriesOwned().size();
 	}
 
 	/**
@@ -82,10 +84,11 @@ public class Player {
 	}
 
 	/**
-	 * @author Chris Ray Created on 5:20:09 PM Nov 27, 2011
-	 * 
+	 * @return the territoriesOwned
+	 * @author Chris Ray Created on 4:40:50 PM Nov 30, 2011
 	 */
-	public void setNumberOfTerritories(int num) {
-		numberOfTerritories = num;
+	public ArrayList<Territory> getTerritoriesOwned() {
+		return territoriesOwned;
 	}
+
 }

@@ -22,6 +22,8 @@ public class Game extends CommandInterface {
 	private Boolean firstTerritory;
 	private Move move;
 	private LinkedList<Player> players;
+	private ArrayList<Die> defendDice;
+	private ArrayList<Die> attackDice;
 
 	/**
 	 * 
@@ -35,6 +37,13 @@ public class Game extends CommandInterface {
 		firstTerritory = true;
 		move = new Move();
 		setPlayers(new LinkedList<Player>());
+
+		// defend Dice
+		defendDice = new ArrayList<Die>();
+		// attack Dice
+		attackDice = new ArrayList<Die>();
+		players = new LinkedList<Player>();
+
 	}
 
 	/*
@@ -68,6 +77,24 @@ public class Game extends CommandInterface {
 	public boolean turnInCards(Player p, ArrayList<TerritoryCard> cardsTurningIn) {
 		if ((cardsTurningIn.size() == 3) && isValidTurnin(cardsTurningIn)) {
 			p.getCards().removeAll(cardsTurningIn);
+
+			// Check to see if any of the cards territories are owned by the
+			// player
+			// if so, award the player two more units
+			if (p.getTerritoriesOwned().contains(
+					cardsTurningIn.get(0).getCardTerritory())
+					|| p.getTerritoriesOwned().contains(
+							cardsTurningIn.get(1).getCardTerritory())
+					|| p.getTerritoriesOwned().contains(
+							cardsTurningIn.get(2).getCardTerritory()))
+				// Special award: award two more units to the player
+				p.setNewUnits(p.getNewUnits() + 2);
+
+			// Normal award: award unitMultiplier units to player
+			p.setNewUnits(p.getNewUnits() + unitMultiplier);
+
+			// move the unitMultiplier to the next position
+			unitMultiplierUp();
 			this.notifyObservers(p);
 			return true;
 		} else
@@ -102,15 +129,11 @@ public class Game extends CommandInterface {
 	@Override
 	public boolean placeOneUnitOnTerritory(Player p, Territory territory) {
 		if (territory.getUnitsOnTerritory() == 0) {
-			int i = map.getTerritories().indexOf(territory);
-			map.getTerritories()
-					.get(i)
-					.setUnitsOnTerritory(
-							map.getTerritories().get(i).getUnitsOnTerritory() + 1);
-			map.getTerritories().get(i).setOwner(p.getTeam());
-			p.setNumberOfTerritories(p.getNumberOfTerritories() + 1);
+			territory.setUnitsOnTerritory(territory.getUnitsOnTerritory() + 1);
+			territory.setOwner(p.getTeam());
+			p.getTerritoriesOwned().add(territory);
 			this.notifyObservers(p);
-			this.notifyObservers(map.getTerritories().get(i));
+			this.notifyObservers(territory);
 		}
 		return false;
 	}
@@ -121,123 +144,92 @@ public class Game extends CommandInterface {
 	 * @see baseModel.CommandInterface#attackTerritory(baseModel.Player,
 	 * java.lang.String, java.lang.String)
 	 * 
-	 * @author Chris Ray Created on 8:27:35 PM Nov 26, 2011
+	 * @author Stephen Brown at 6:17pm 11/29/11, Christopher Ray (Dice changes
+	 * only) 11/30/11 7:26 PM
 	 */
 	@Override
-	/**
-	 * the attack method 
-	 * 
-	 * @param p the player attacking
-	 * @param origin the territory the player is attacking from
-	 * @param destination the territory the player is attacking
-	 * @param attackingPieces the amount of units the player is attacking with
-	 * @author Stephen Brown at 6:17pm 11/29/11
-	 */
-	public boolean attackTerritory(Player p, Territory origin,
-			Territory destination, int attackingDice) {
-		List<Integer> diceA = new ArrayList<Integer>();// attacker's dice
-		List<Integer> diceD = new ArrayList<Integer>();// defender's dice
-		List<Die> attDice = new ArrayList<Die>();
-		Die a1 = new Die();
-		Die a2 = new Die();
-		Die a3 = new Die();
-		attDice.add(a1);
-		attDice.add(a2);
-		attDice.add(a3);
-		List<Die> defDice = new ArrayList<Die>();
-		Die d1 = new Die();
-		Die d2 = new Die();
-		defDice.add(d1);
-		defDice.add(d2);
+	public boolean attackTerritory(Player p, Territory orig, Territory dest,
+			int numOfAttackingDice) {
+		// Check to see if the two territories are neighbors first, if not,
+		// nothing happens, Attack Fails.
+		if (orig.getNeighbors().contains(dest)) {
 
-		Iterator<Die> aD = attDice.iterator();
-		Iterator<Die> dD = defDice.iterator();
+			int defenders = dest.getUnitsOnTerritory();
+			if (defenders > 2)
+				defenders = 2;
 
-		int defenders = destination.getUnitsOnTerritory();
-		if (defenders > 2)
-			defenders = 2;
-		Die temp;
-		if ((origin.getOwner() == p.getTeam())
-				&& (attackingDice < origin.getUnitsOnTerritory())
-				&& (attackingDice < 4))
-		// the attacking territory must be the player's, and there has to be at
-		// least
-		// one unit left on the original territory. Also max of 3 attacking Dice
-		{
-			int remainingArmy = attackingDice;// records the beginning and
-												// ending number of attacking
-												// units
-			for (int n = 0; n < attackingDice; n++)// makes a die roll for each
-													// attacking unit
-			{
-				temp = aD.next();
-				temp.initiateRoll();
-				diceA.add(temp.getRoll());
-			}
-			Collections.sort(diceA, Collections.reverseOrder());// sorts in
-																// descending
-																// order
-			for (int n = 0; n < defenders; n++)// makes a die roll for each
-												// defending unit
-			{
-				temp = dD.next();
-				temp.initiateRoll();
-				diceD.add(temp.getRoll());
-			}
-			Collections.sort(diceD, Collections.reverseOrder());
+			// the attacking territory must be the player's, and there has to be
+			// at least one unit left on the original territory.
+			// Also max of 3 attacking Dice
+			if ((orig.getOwner() == p.getTeam())
+					&& (numOfAttackingDice < orig.getUnitsOnTerritory())
+					&& (numOfAttackingDice < 4) && (numOfAttackingDice >= 1)) {
+				// records the beginning and ending number of attacking units
+				int remainingArmy = numOfAttackingDice;
 
-			Iterator<Integer> att = diceA.iterator();// iterators for attacking
-														// and defending dice,
-														// resp.
-			Iterator<Integer> def = diceD.iterator();
+				rollAttackDice(numOfAttackingDice);
+				// Sorts in descending order
+				Collections.sort(this.getAttackDice(),
+						Collections.reverseOrder());
 
-			while ((att.hasNext()) && (def.hasNext()))// only goes for the
-														// lesser number of dice
-			{
-				Integer attackNum = att.next();
-				Integer defNum = def.next();
+				rollDefendDice();
+				// Sorts in descending order
+				Collections.sort(this.getDefendDice(),
+						Collections.reverseOrder());
 
-				if (attackNum > defNum)
-					destination.removeUnits(1);
-				else
-					origin.removeUnits(1);
-			}
-			// capture:
-			if (destination.getUnitsOnTerritory() == 0) {
+				// iterators for attacking and defending dice, resp.
+				Iterator<Die> attackingDice = this.getAttackDice().iterator();
+				Iterator<Die> defendingDice = this.getDefendDice().iterator();
 
-				// find destination's owner player
-				Iterator<Player> playersItr = players.iterator();
-				Player current = new Player(null);
-				while (playersItr.hasNext()) {
-					current = playersItr.next();
-					if (current.getTeam() == destination.getOwner())
-						break;
+				// Only goes for the lesser number of dice.
+				while ((attackingDice.hasNext()) && (defendingDice.hasNext())) {
+					Die attackingDie = attackingDice.next();
+					Die defendingDie = defendingDice.next();
+
+					// Die is now comparable...thus no need to compare their
+					// rolls, you can just compare themselves directly
+					if (attackingDie.compareTo(defendingDie) > 0)
+						dest.removeUnits(1);
+					else
+						orig.removeUnits(1);
 				}
-				current.setNumberOfTerritories(current.getNumberOfTerritories() - 1);
-				// check if current has no territories
-				if (current.getNumberOfTerritories() == 0) {
-					// give his or her cards to player p
-					p.getCards().addAll(current.getCards());
+				// capture:
+				if (dest.getUnitsOnTerritory() == 0) {
 
-					// remove current from players List
-					players.remove(current);
-					/*
-					 * while(p.getCards().size()>4) { //request turn in cards
-					 * from GUI }
-					 */
-					this.notifyObservers(players);
+					// find destination's owner player
+					Iterator<Player> playersItr = players.iterator();
+					Player current = new Player(null);
+					while (playersItr.hasNext()) {
+						current = playersItr.next();
+						if (current.getTeam() == dest.getOwner())
+							break;
+					}
+					current.getTerritoriesOwned().remove(dest);
+					// check if current has no territories
+					if (current.getNumberOfTerritories() == 0) {
+						// give his or her cards to player p
+						p.getCards().addAll(current.getCards());
 
+						// remove current from players List
+						players.remove(current);
+						/*
+						 * while(p.getCards().size()>4) { //request turn in
+						 * cards from GUI }
+						 */
+						this.notifyObservers(players);
+
+					}
+					if (firstTerritory) {
+						// add card
+						drawCard(p);
+						firstTerritory = false;
+					}
+					move(p, orig, dest, remainingArmy);
+					updateMove(p, orig, dest);
 				}
-				if (firstTerritory) {
-					// add card
-					drawCard(p);
-					firstTerritory = false;
-				}
-				move(p, origin, destination, remainingArmy);
-				updateMove(p, origin, destination);
+
+				return true;
 			}
-
-			return true;
 		}
 		return false;
 	}
@@ -254,31 +246,33 @@ public class Game extends CommandInterface {
 	public boolean move(Player p, Territory orig, Territory dest,
 			int numOfUnitsToMove) {
 		try {
+			// Check to see if the two territories are neighbors first, if not,
+			// nothing happens, Move Fails.
+			if (orig.getNeighbors().contains(dest))
+				if ((orig.getOwner() == p.getTeam())
+						&& ((orig.getUnitsOnTerritory() > 1) && (numOfUnitsToMove < orig
+								.getUnitsOnTerritory())))
+					if ((dest.getUnitsOnTerritory() <= 0)
+							|| (dest.getOwner() == p.getTeam())) {
 
-			if ((orig.getOwner() == p.getTeam())
-					&& ((orig.getUnitsOnTerritory() > 1) && (numOfUnitsToMove < orig
-							.getUnitsOnTerritory())))
-				if ((dest.getUnitsOnTerritory() <= 0)
-						|| (dest.getOwner() == p.getTeam())) {
+						// move is valid...proceed.
 
-					// move is valid...proceed.
-
-					// if numberOfUnitsToMove > orig.getUnitsOnTerritory()
-					// move orig.getUnitsOnTerritory()-1 units
-					if (numOfUnitsToMove > orig.getUnitsOnTerritory()) {
-						orig.setUnitsOnTerritory(1);
-						dest.setUnitsOnTerritory(orig.getUnitsOnTerritory() - 1);
-					} else {
-						orig.setUnitsOnTerritory(orig.getUnitsOnTerritory()
-								- numOfUnitsToMove);
-						dest.setUnitsOnTerritory(dest.getUnitsOnTerritory()
-								+ numOfUnitsToMove);
+						// if numberOfUnitsToMove > orig.getUnitsOnTerritory()
+						// move orig.getUnitsOnTerritory()-1 units
+						if (numOfUnitsToMove > orig.getUnitsOnTerritory()) {
+							orig.setUnitsOnTerritory(1);
+							dest.setUnitsOnTerritory(orig.getUnitsOnTerritory() - 1);
+						} else {
+							orig.setUnitsOnTerritory(orig.getUnitsOnTerritory()
+									- numOfUnitsToMove);
+							dest.setUnitsOnTerritory(dest.getUnitsOnTerritory()
+									+ numOfUnitsToMove);
+						}
+						this.notifyObservers(orig);
+						this.notifyObservers(dest);
+						updateMove(p, orig, dest);
+						return true;
 					}
-					this.notifyObservers(orig);
-					this.notifyObservers(dest);
-					updateMove(p, orig, dest);
-					return true;
-				}
 			return false;
 		} catch (Exception e) {
 
@@ -298,11 +292,42 @@ public class Game extends CommandInterface {
 
 	}
 
+	/**
+	 * 
+	 * @author Chris Ray Created on 6:42:19 PM Nov 30, 2011
+	 * 
+	 */
 	private void unitMultiplierUp() {
 		if (unitMultiplier < 10)
 			unitMultiplier += 2;
 		else
 			unitMultiplier += 5;
+	}
+
+	/**
+	 * 
+	 * @author Chris Ray Created on 6:42:24 PM Nov 30, 2011
+	 * 
+	 */
+	private void rollAttackDice(int numOfDiceToRoll) {
+		ArrayList<Die> returnDice = new ArrayList<Die>();
+		if ((numOfDiceToRoll <= 3) && (numOfDiceToRoll >= 1))
+			for (int i = 0; i < numOfDiceToRoll; i++) {
+				attackDice.get(i).initiateRoll();
+				returnDice.add(attackDice.get(i));
+			}
+		this.attackDice = returnDice;
+	}
+
+	/**
+	 * 
+	 * @author Chris Ray Created on 6:41:38 PM Nov 30, 2011 <br />
+	 *         Assumes always will be rolling 2 dice
+	 * 
+	 */
+	private void rollDefendDice() {
+		for (Die d : defendDice)
+			d.initiateRoll();
 	}
 
 	/**
@@ -355,4 +380,46 @@ public class Game extends CommandInterface {
 	public void setPlayers(LinkedList<Player> players) {
 		this.players = players;
 	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see baseModel.CommandInterface#getDefendDice()
+	 * 
+	 * @author Chris Ray Created on 5:36:45 PM Nov 30, 2011
+	 */
+	@Override
+	public ArrayList<Die> getDefendDice() {
+		return this.defendDice;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see baseModel.CommandInterface#getAttackDice()
+	 * 
+	 * @author Chris Ray Created on 5:36:45 PM Nov 30, 2011
+	 */
+	@Override
+	public ArrayList<Die> getAttackDice() {
+		return this.attackDice;
+	}
+
+	/**
+	 * @return the unitMultiplier
+	 * @author Chris Ray Created on 7:24:23 PM Nov 30, 2011
+	 */
+	public int getUnitMultiplier() {
+		return unitMultiplier;
+	}
+
+	/**
+	 * @param unitMultiplier
+	 *            the unitMultiplier to set
+	 * @author Chris Ray Created on 7:24:23 PM Nov 30, 2011
+	 */
+	public void resetUnitMultiplier() {
+		this.unitMultiplier = 4;
+	}
+
 }
