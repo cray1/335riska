@@ -26,7 +26,7 @@ public class MasterView extends javax.swing.JFrame {
 		MasterView mv = new MasterView();
 		mv.setVisible(true);
 	}
-	
+	//test commit
 	public MasterView(){
 		setUpGUICode();
 		setUpMenuBar();
