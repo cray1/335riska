@@ -14,6 +14,8 @@ import java.util.Observable;
 public abstract class CommandInterface extends Observable {
 
 	/**
+	 * Attempts to move a set number of units from one territory to another.
+	 * 
 	 * @author Chris Ray Created on 8:21:29 PM Nov 26, 2011
 	 * @param p
 	 * @param orig
@@ -21,8 +23,7 @@ public abstract class CommandInterface extends Observable {
 	 * @param numOfUnitsToMove
 	 * @return True if successful, false otherwise
 	 * 
-	 *         Attempts to move a set number of units from one territory to
-	 *         another.
+	 * 
 	 * 
 	 */
 	public abstract boolean move(Player p, Territory orig, Territory dest,
