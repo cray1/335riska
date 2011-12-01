@@ -26,13 +26,14 @@ public class MasterView extends javax.swing.JFrame {
 		MasterView mv = new MasterView();
 		mv.setVisible(true);
 	}
-	//test commit again
+	
 	public MasterView(){
 		setUpGUICode();
 		setUpMenuBar();
 		setUpBody();
 		changeView(Views.TITLE, null);
 	}
+	//Added to get close size while still being variable
 	Image mapImage = new ImageIcon("images/map2.png").getImage();
 	private void setUpGUICode(){
 		this.setSize(mapImage.getWidth(null), mapImage.getHeight(null) + 80); //680
