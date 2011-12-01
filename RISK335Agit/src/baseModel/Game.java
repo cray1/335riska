@@ -68,6 +68,24 @@ public class Game extends CommandInterface {
 	public boolean turnInCards(Player p, ArrayList<TerritoryCard> cardsTurningIn) {
 		if ((cardsTurningIn.size() == 3) && isValidTurnin(cardsTurningIn)) {
 			p.getCards().removeAll(cardsTurningIn);
+
+			// Check to see if any of the cards territories are owned by the
+			// player
+			// if so, award the player two more units
+			if (p.getTerritoriesOwned().contains(
+					cardsTurningIn.get(0).getCardTerritory())
+					|| p.getTerritoriesOwned().contains(
+							cardsTurningIn.get(1).getCardTerritory())
+					|| p.getTerritoriesOwned().contains(
+							cardsTurningIn.get(2).getCardTerritory()))
+				// Special award: award two more units to the player
+				p.setNewUnits(p.getNewUnits() + 2);
+
+			// Normal award: award unitMultiplier units to player
+			p.setNewUnits(p.getNewUnits() + unitMultiplier);
+
+			// move the unitMultiplier to the next position
+			unitMultiplierUp();
 			this.notifyObservers(p);
 			return true;
 		} else
@@ -102,15 +120,11 @@ public class Game extends CommandInterface {
 	@Override
 	public boolean placeOneUnitOnTerritory(Player p, Territory territory) {
 		if (territory.getUnitsOnTerritory() == 0) {
-			int i = map.getTerritories().indexOf(territory);
-			map.getTerritories()
-					.get(i)
-					.setUnitsOnTerritory(
-							map.getTerritories().get(i).getUnitsOnTerritory() + 1);
-			map.getTerritories().get(i).setOwner(p.getTeam());
-			p.setNumberOfTerritories(p.getNumberOfTerritories() + 1);
+			territory.setUnitsOnTerritory(territory.getUnitsOnTerritory() + 1);
+			territory.setOwner(p.getTeam());
+			p.getTerritoriesOwned().add(territory);
 			this.notifyObservers(p);
-			this.notifyObservers(map.getTerritories().get(i));
+			this.notifyObservers(territory);
 		}
 		return false;
 	}
@@ -223,8 +237,7 @@ public class Game extends CommandInterface {
 						if (current.getTeam() == destination.getOwner())
 							break;
 					}
-					current.setNumberOfTerritories(current
-							.getNumberOfTerritories() - 1);
+					current.getTerritoriesOwned().remove(destination);
 					// check if current has no territories
 					if (current.getNumberOfTerritories() == 0) {
 						// give his or her cards to player p

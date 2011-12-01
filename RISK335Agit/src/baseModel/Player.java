@@ -13,6 +13,7 @@ import java.util.ArrayList;
 public class Player {
 
 	private int numberOfUnits;
+	private int numberOfTerritories;
 	private int newUnits; // the number of units yet to be placed on the board
 							// this turn
 	private Team team;
@@ -27,6 +28,7 @@ public class Player {
 	public Player(Team t) {
 		team = t;
 		numberOfUnits = 0;
+		numberOfTerritories = 0;
 		newUnits = 0;
 		cards = new ArrayList<TerritoryCard>();
 		territoriesOwned = new ArrayList<Territory>();
@@ -89,12 +91,4 @@ public class Player {
 		return territoriesOwned;
 	}
 
-	/**
-	 * @param territoriesOwned
-	 *            the territoriesOwned to set
-	 * @author Chris Ray Created on 4:40:50 PM Nov 30, 2011
-	 */
-	public void setTerritoriesOwned(ArrayList<Territory> territoriesOwned) {
-		this.territoriesOwned = territoriesOwned;
-	}
 }
