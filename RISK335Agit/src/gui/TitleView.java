@@ -48,7 +48,7 @@ public class TitleView extends MasterViewPanel {
 	private void setUpButtons() {
 		
 		JPanel buttonPanel = new JPanel();
-//		buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
+		buttonPanel.setLayout(new GridLayout(1,2));
 		
 		hostGame = new JButton("Host Game");
 		hostGame.addActionListener(new HostGameListener());
