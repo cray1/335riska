@@ -122,6 +122,20 @@ public class MapView extends MasterViewPanel implements Observer{
 		
 		userBar.add(attackBox);
 		
+//		//Cards
+//		newGame.setActivePlayer(new Player(Team.GREEN));
+//		
+//		newGame.drawCard(newGame.getActivePlayer());
+//		newGame.getActivePlayer().getCards().toString();
+		JLabel cavalry = new JLabel(new ImageIcon("images/cavalryCard.jpg"));
+		cavalry.add(new JLabel("Test"));
+		userBar.add(cavalry);
+		userBar.add(new JLabel(new ImageIcon("images/cavalryCard.jpg")));
+		userBar.add(new JLabel(new ImageIcon("images/cavalryCard.jpg")));
+		userBar.add(new JLabel(new ImageIcon("images/cavalryCard.jpg")));
+		userBar.add(new JLabel(new ImageIcon("images/cavalryCard.jpg")));
+
+		
 		//Chat area
 		JPanel textArea = new JPanel();
 		textArea.setLayout(new BoxLayout(textArea, BoxLayout.Y_AXIS));
