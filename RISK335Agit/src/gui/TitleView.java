@@ -10,7 +10,11 @@ import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+
+import server.RiskiClient;
+import server.RiskiServer;
 
 /**
  * @author AJ Venne Created on 12:35:37 AM Nov 27, 2011
@@ -70,7 +74,10 @@ public class TitleView extends MasterViewPanel {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
+			String port = JOptionPane.showInputDialog(
+					"Enter the port you want to listen on:", null);
 			m.changeView(Views.MAP, null);
+			m.server = new RiskiServer(port);
 		}
 
 	}
@@ -78,6 +85,9 @@ public class TitleView extends MasterViewPanel {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
+			m.client = new RiskiClient(JOptionPane.showInputDialog("Please enter your name."), JOptionPane
+					.showInputDialog("Please enter the ip address you'd like to connect to."), Integer.parseInt(JOptionPane
+							.showInputDialog("Please enter the port to use.")));
 			m.changeView(Views.JOIN, null);
 		}
 

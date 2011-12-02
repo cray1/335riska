@@ -17,9 +17,14 @@ import javax.swing.JPanel;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 
+import server.RiskiClient;
+import server.RiskiServer;
+
 
 @SuppressWarnings("serial")
 public class MasterView extends javax.swing.JFrame {
+	RiskiServer server;
+	RiskiClient client;
 	private JPanel body = new JPanel();
 	
 	public static void main (String[] args){
