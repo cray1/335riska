@@ -1,6 +1,10 @@
 package gui;
 
+
+import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -12,6 +16,10 @@ import java.util.Observer;
 
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 
 
 import javax.swing.JLabel;
@@ -19,7 +27,6 @@ import javax.swing.JLabel;
 import baseModel.Continent;
 import baseModel.Game;
 import baseModel.Map;
-import baseModel.Player;
 import baseModel.Team;
 import baseModel.Territory;
 
@@ -30,12 +37,7 @@ public class MapView extends MasterViewPanel implements Observer{
 	Game newGame;
 	Map gameMap;
 	HashMap<String, Continent> continents;
-	HashMap<String, Territory> na;
-	HashMap<String, Territory> sa;
-	HashMap<String, Territory> afr;
-	HashMap<String, Territory> eur;
-	HashMap<String, Territory> aus;
-	HashMap<String, Territory> asia;
+	
 	HashMap<String, Territory> territories;
 	Image mapImage;
 	public MapView(MasterView m) {
@@ -57,25 +59,46 @@ public class MapView extends MasterViewPanel implements Observer{
 
 	    this.add(new JLabel(new ImageIcon(buffImage)));
 		this.addMouseListener(new mouse());
+		
 		//Adds motion listener for tooltip text
 		this.addMouseMotionListener(new mouseMove());
+//		setUpUserBar();
+		
+	}
+	
+	private void setUpUserBar(){
+		JPanel userBar = new JPanel();
+		userBar.setLayout(new BoxLayout(userBar, BoxLayout.X_AXIS));
+		userBar.setVisible(true);
+		userBar.setSize(mapImage.getWidth(null), 300);
+		this.add(userBar);
+		JLabel turn = new JLabel("  It is "+ "BLANK" +"\'s turn");
+		JButton surrender = new JButton("Surrender");
+		
+		JButton turnInCards = new JButton("Turn in Cards");
+		JButton	placeUnits = new JButton("Place Units");
+		JButton nextPhase = new JButton("Next Phase");
+		
+		JButton attack = new JButton("Attack");
+		JButton move = new JButton("Move");
+		JButton endTurn = new JButton("End Turn");
+//		userBar.add(surrender);
+		
+		JPanel	buttonBox = new JPanel();
+		buttonBox.setLayout(new GridLayout(4, 1));
+		buttonBox.add(turn);
+		buttonBox.add(turnInCards);
+		buttonBox.add(placeUnits);
+		buttonBox.add(nextPhase);
+		
+		userBar.add(buttonBox);
 		
 		
-		//NOTE
-		//Currently a bug that needs to be worked out: Buffered Image and displayed image are not in exact spot when this is added, hard to track since
-		//the buffered is invisible...
+		JTextArea chatArea = new JTextArea(2, 15);
 		
-		//adding a user bar for cards, buttons, etc
-//		JPanel userBar = new JPanel();
-//		this.add(userBar);
-//		userBar.setLocation(0,680);
-//		userBar.setVisible(true);
-//		//adding buttons
-//		JButton cards = new JButton("Cards");
-//		JButton quit = new JButton("Quit Game");
-//		userBar.add(cards);
-//		userBar.add(quit);
-		
+		JScrollPane scrollPane = new JScrollPane(chatArea);
+		setPreferredSize(new Dimension(320, 110));
+		userBar.add(scrollPane, BorderLayout.CENTER);
 	}
 	
 	private void setUpGame(){
@@ -87,8 +110,7 @@ public class MapView extends MasterViewPanel implements Observer{
 	}
 	
 	public void paintComponent(Graphics g){
-		
-		
+			
 		//TO DO: Working on making these flags appear over/on every owned territory on repaint, gonna make them small to fit new map better.
 		territories.get("Alaska").setOwner(Team.GREEN);
 		if(territories.get("Alaska").getOwner() != null){
@@ -106,6 +128,7 @@ public class MapView extends MasterViewPanel implements Observer{
 			if(e.getX() < buffImage.getWidth() && e.getY() < buffImage.getHeight()){
 			System.out.println(e.getX() + "," + e.getY() + " COLOR: " + buffImage.getRGB(e.getX(), e.getY()));
 			//calls helper method designed to check which area is being clicked based on coordinates and color
+			
 //			System.out.println(getLocation(e.getX(), e.getY()));
 						
 			System.out.println(territories.get(getLocation(e.getX(), e.getY())).toString());
