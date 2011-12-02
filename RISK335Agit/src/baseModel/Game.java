@@ -110,7 +110,7 @@ public class Game extends CommandInterface {
 	@Override
 	public boolean turnInCards(Player p, TerritoryCard card1,
 			TerritoryCard card2, TerritoryCard card3) {
-		if (isValidTurnin(card1, card2, card3) && (currentPhase == newPh)) {
+		if (isValidTurnin(card1, card2, card3)) {
 			p.getCards().remove(card1);
 			p.getCards().remove(card2);
 			p.getCards().remove(card3);
@@ -207,7 +207,7 @@ public class Game extends CommandInterface {
 			int numOfAttackingDice) {
 		// Check to see if the two territories are neighbors first, if not,
 		// nothing happens, Attack Fails.
-		if (orig.getNeighbors().contains(dest) && (currentPhase == attackPh)) {
+		if (orig.getNeighbors().contains(dest)) {
 
 			int defenders = dest.getUnitsOnTerritory();
 			if (defenders > 2)
