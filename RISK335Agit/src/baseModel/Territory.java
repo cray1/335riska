@@ -15,23 +15,25 @@ public class Territory {
 	private ArrayList<Territory> neighbors;
 	private final String name;
 	private final String parentContinent;
-	private Team owner;
+	private Team owningTeam;
 	private int UnitsOnTerritory;
+	private Player owningPlayer;
 
 	/**
 	 * @param name
 	 * @param parentContinent
 	 * @param neighbors
 	 * @author Chris Ray Created on 2:16:02 AM Nov 27, 2011
-	 * @param owner
+	 * @param owningTeam
 	 * 
 	 */
 	public Territory(String name, String parentContinent) {
 		this.name = name;
 		this.setNeighbors(null);
 		this.parentContinent = parentContinent;
-		this.setOwner(null);
+		this.setOwningTeam(null);
 		this.setUnitsOnTerritory(0);
+		owningPlayer = new Player(null);
 	}
 
 	/**
@@ -52,20 +54,21 @@ public class Territory {
 	}
 
 	/**
-	 * @return the owner
+	 * @return the owningTeam
 	 * @author Chris Ray Created on 2:18:13 AM Nov 27, 2011
 	 */
-	public Team getOwner() {
-		return owner;
+	public Team getOwningTeam() {
+		return owningTeam;
 	}
 
 	/**
-	 * @param owner
-	 *            the owner to set
+	 * @param owningTeam
+	 *            the owningTeam to set
 	 * @author Chris Ray Created on 2:18:13 AM Nov 27, 2011
+	 * @param owner
 	 */
-	public void setOwner(Team owner) {
-		this.owner = owner;
+	public void setOwningTeam(Team owner) {
+		this.owningTeam = owner;
 	}
 
 	/**
@@ -97,9 +100,9 @@ public class Territory {
 	public boolean addUnits(int u, Team t) {
 		if (getUnitsOnTerritory() == 0) {
 			setUnitsOnTerritory(u);
-			setOwner(t);
+			setOwningTeam(t);
 			return true;
-		} else if (getOwner() == t) {
+		} else if (getOwningTeam() == t) {
 			setUnitsOnTerritory(u + getUnitsOnTerritory());
 			return true;
 		}
@@ -146,6 +149,22 @@ public class Territory {
 	 */
 	public void setNeighbors(ArrayList<Territory> neighbors) {
 		this.neighbors = neighbors;
+	}
+
+	/**
+	 * @return the owningPlayer
+	 * @author Chris Ray Created on 8:05:02 AM Dec 2, 2011
+	 */
+	public Player getOwningPlayer() {
+		return owningPlayer;
+	}
+
+	/**
+	 * @return the owningPlayer
+	 * @author Chris Ray Created on 8:05:02 AM Dec 2, 2011
+	 */
+	public void setOwningPlayer(Player p) {
+		this.owningPlayer = p;
 	}
 
 }

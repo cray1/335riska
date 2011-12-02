@@ -150,12 +150,12 @@ public class MapView extends MasterViewPanel implements Observer{
 	public void paintComponent(Graphics g){
 			
 		//TO DO: Working on making these flags appear over/on every owned territory on repaint, gonna make them small to fit new map better.
-		territories.get("Alaska").setOwner(Team.GREEN);
-		if(territories.get("Alaska").getOwner() != null){
+		territories.get("Alaska").setOwningTeam(Team.GREEN);
+		if(territories.get("Alaska").getOwningTeam() != null){
 //			
 //			char[] name = territories.get("Alaska").getOwner().toString().toCharArray();
 //			g.drawChars(name, 0, 5, 317, 178);
-			mapBox.add(new JLabel(territories.get("Alaska").getOwner().toString()));
+			mapBox.add(new JLabel(territories.get("Alaska").getOwningTeam().toString()));
 		}
 			
 		

@@ -22,6 +22,24 @@ public class Game extends CommandInterface {
 	private LinkedList<Player> players;
 	private ArrayList<Die> defendDice;
 	private ArrayList<Die> attackDice;
+	private Player activePlayer;
+
+	public boolean startGame() {
+
+		if (checkSetUp()) {
+			activePlayer = players.getFirst();
+			return true;
+
+		} else
+			return false;
+
+	}
+
+	private boolean checkSetUp() {
+		if (players.size() >= 2)
+			return true;
+		return false;
+	}
 
 	/**
 	 * 
@@ -41,6 +59,7 @@ public class Game extends CommandInterface {
 		// attack Dice
 		attackDice = new ArrayList<Die>();
 		players = new LinkedList<Player>();
+		setActivePlayer(new Player(null)); // placeholder
 
 	}
 
@@ -143,6 +162,8 @@ public class Game extends CommandInterface {
 	public boolean claimTerritory(Player p, Territory territory) {
 		if (territory.getUnitsOnTerritory() == 0) {
 			boolean work = territory.addUnits(1, p.getTeam());
+			territory.setOwningTeam(p.getTeam());
+			territory.setOwningPlayer(p);
 
 			p.getTerritoriesOwned().add(territory);
 			this.notifyObservers(p);
@@ -179,7 +200,7 @@ public class Game extends CommandInterface {
 			// the attacking territory must be the player's, and there has to be
 			// at least one unit left on the original territory.
 			// Also max of 3 attacking Dice
-			if ((orig.getOwner() == p.getTeam())
+			if ((orig.getOwningTeam() == p.getTeam())
 					&& (numOfAttackingDice < orig.getUnitsOnTerritory())
 					&& (numOfAttackingDice < 4) && (numOfAttackingDice >= 1)) {
 				// records the beginning and ending number of attacking units
@@ -215,21 +236,22 @@ public class Game extends CommandInterface {
 				if (dest.getUnitsOnTerritory() == 0) {
 
 					// find destination's owner player
-					Iterator<Player> playersItr = players.iterator();
-					Player current = new Player(null);
-					while (playersItr.hasNext()) {
-						current = playersItr.next();
-						if (current.getTeam() == dest.getOwner())
-							break;
-					}
-					current.getTerritoriesOwned().remove(dest);
+					// Iterator<Player> playersItr = players.iterator();
+					Player currentOwningPlayer = dest.getOwningPlayer();
+					// new Player(null);
+					// while (playersItr.hasNext()) {
+					// current = playersItr.next();
+					// if (current.getTeam() == dest.getOwningTeam())
+					// break;
+					// }
+					currentOwningPlayer.getTerritoriesOwned().remove(dest);
 					// check if current has no territories
-					if (current.getNumberOfTerritories() == 0) {
+					if (currentOwningPlayer.getNumberOfTerritories() == 0) {
 						// give his or her cards to player p
-						p.getCards().addAll(current.getCards());
+						p.getCards().addAll(currentOwningPlayer.getCards());
 
 						// remove current from players List
-						players.remove(current);
+						players.remove(currentOwningPlayer);
 						/*
 						 * while(p.getCards().size()>4) { //request turn in
 						 * cards from GUI }
@@ -242,7 +264,14 @@ public class Game extends CommandInterface {
 						drawCard(p);
 						firstTerritory = false;
 					}
+
 					move(p, orig, dest, remainingArmy);
+					if (p.getTerritoriesOwned().containsAll(
+							map.getMap().get(dest.getParentContinent())
+									.getChildren()))
+						// award another territory card for capturing a
+						// continent
+						drawCard(p);
 					updateMove(p, orig, dest);
 				}
 
@@ -274,11 +303,11 @@ public class Game extends CommandInterface {
 			// Check to see if the two territories are neighbors first, if not,
 			// nothing happens, Move Fails.
 			if (orig.getNeighbors().contains(dest))
-				if ((orig.getOwner() == p.getTeam())
+				if ((orig.getOwningTeam() == p.getTeam())
 						&& ((orig.getUnitsOnTerritory() > 1) && (numOfUnitsToMove < orig
 								.getUnitsOnTerritory())))
 					if ((dest.getUnitsOnTerritory() <= 0)
-							|| (dest.getOwner() == p.getTeam())) {
+							|| (dest.getOwningTeam() == p.getTeam())) {
 
 						// move is valid...proceed.
 
@@ -450,6 +479,23 @@ public class Game extends CommandInterface {
 	 */
 	public void resetUnitMultiplier() {
 		this.unitMultiplier = 4;
+	}
+
+	/**
+	 * @return the activePlayer
+	 * @author Chris Ray Created on 8:01:31 AM Dec 2, 2011
+	 */
+	public Player getActivePlayer() {
+		return activePlayer;
+	}
+
+	/**
+	 * @param activePlayer
+	 *            the activePlayer to set
+	 * @author Chris Ray Created on 8:01:31 AM Dec 2, 2011
+	 */
+	public void setActivePlayer(Player activePlayer) {
+		this.activePlayer = activePlayer;
 	}
 
 }
