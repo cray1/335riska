@@ -59,7 +59,7 @@ public abstract class CommandInterface extends Observable {
 	 * 
 	 */
 	public abstract boolean turnInCards(Player p,
-			ArrayList<TerritoryCard> cardsTurningIn);
+			TerritoryCard card1, TerritoryCard card2, TerritoryCard card3);
 
 	/**
 	 * This is only for when you are placing the first unit on a territory

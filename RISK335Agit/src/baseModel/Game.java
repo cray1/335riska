@@ -73,22 +73,52 @@ public class Game extends CommandInterface {
 	 * @author Chris Ray Created on 8:27:35 PM Nov 26, 2011
 	 */
 	@Override
-	public boolean turnInCards(Player p, ArrayList<TerritoryCard> cardsTurningIn) {
-		if ((cardsTurningIn.size() == 3) && isValidTurnin(cardsTurningIn)) {
-			p.getCards().removeAll(cardsTurningIn);
+	public boolean turnInCards(Player p, TerritoryCard card1, TerritoryCard card2, TerritoryCard card3) {
+		if (isValidTurnin(card1,card2,card3)) 
+		{
+			p.getCards().remove(card1);
+			p.getCards().remove(card2);
+			p.getCards().remove(card3);
 
 			// Check to see if any of the cards territories are owned by the
 			// player
 			// if so, award the player two more units
-			if (p.getTerritoriesOwned().contains(
-					cardsTurningIn.get(0).getCardTerritory())
-					|| p.getTerritoriesOwned().contains(
-							cardsTurningIn.get(1).getCardTerritory())
-					|| p.getTerritoriesOwned().contains(
-							cardsTurningIn.get(2).getCardTerritory()))
-				// Special award: award two more units to the player
-				p.setNewUnits(p.getNewUnits() + 2);
-
+			Iterator<Territory> plyrTerItr = p.getTerritoriesOwned().iterator();
+			if (p.getTerritoriesOwned().contains(card1.getCardTerritory()))
+			{
+				Territory temp = null;
+				while (plyrTerItr.hasNext())
+				{
+					temp = plyrTerItr.next();
+					if (card1.getCardTerritory() == temp)
+						break;
+				}
+				temp.addUnits(2, p.getTeam());
+			}
+			plyrTerItr = p.getTerritoriesOwned().iterator();
+			if (p.getTerritoriesOwned().contains(card2.getCardTerritory()))
+			{
+				Territory temp = null;
+				while (plyrTerItr.hasNext())
+				{
+					temp = (Territory) plyrTerItr.next();
+					if (card1.getCardTerritory() == temp)
+						break;
+				}
+				temp.addUnits(2, p.getTeam());
+			}
+			plyrTerItr = p.getTerritoriesOwned().iterator();
+			if (p.getTerritoriesOwned().contains(card3.getCardTerritory()))
+			{
+				Territory temp = null;
+				while (plyrTerItr.hasNext())
+				{
+					temp = (Territory) plyrTerItr.next();
+					if (card1.getCardTerritory() == temp)
+						break;
+				}
+				temp.addUnits(2, p.getTeam());
+			}
 			// Normal award: award unitMultiplier units to player
 			p.setNewUnits(p.getNewUnits() + unitMultiplier);
 
@@ -100,19 +130,21 @@ public class Game extends CommandInterface {
 			return true;
 	}
 
-	private boolean isValidTurnin(ArrayList<TerritoryCard> cards) {
+	private boolean isValidTurnin(TerritoryCard card1, TerritoryCard card2, TerritoryCard card3) {
 		// 2 and a wildcard or 1 and 2 wildcards
-		if (cards.contains(CardType.WILDCARD) && (cards.size() == 3))
+		ArrayList<TerritoryCard> cards = new ArrayList<TerritoryCard>();
+		cards.add(card1);
+		cards.add(card2);
+		cards.add(card3);
+		if ((card1.getCardType() == CardType.WILDCARD)||(card2.getCardType() == CardType.WILDCARD)||(card3.getCardType() == CardType.WILDCARD))
 			return true;
-		else if ((cards.get(0).getCardType() == cards.get(1).getCardType())
-				&& (cards.get(1).getCardType() == cards.get(2).getCardType()))
+		else if ((card1.getCardType() == card2.getCardType()) && (card2.getCardType() == card2.getCardType()))
 			return true;
 		// 1 of each
 		else if (cards.contains(CardType.CANNON)
 				&& cards.contains(CardType.HORSE)
 				&& cards.contains(CardType.SOLDIER))
 			return true;
-
 		else
 			return false;
 	}
@@ -429,6 +461,15 @@ public class Game extends CommandInterface {
 	 */
 	public void resetUnitMultiplier() {
 		this.unitMultiplier = 4;
+	}
+	
+	public void setUpGame()
+	{
+		
+	}
+	public void takeTurn(Player p)
+	{
+		
 	}
 
 }
