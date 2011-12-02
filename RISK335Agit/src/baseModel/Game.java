@@ -83,36 +83,19 @@ public class Game extends CommandInterface {
 			// Check to see if any of the cards territories are owned by the
 			// player
 			// if so, award the player two more units
-			Iterator<Territory> plyrTerItr = p.getTerritoriesOwned().iterator();
-			if (p.getTerritoriesOwned().contains(card1.getCardTerritory())) {
-				Territory temp = null;
-				while (plyrTerItr.hasNext()) {
-					temp = plyrTerItr.next();
-					if (card1.getCardTerritory() == temp)
-						break;
-				}
-				temp.addUnits(2, p.getTeam());
-			}
-			plyrTerItr = p.getTerritoriesOwned().iterator();
-			if (p.getTerritoriesOwned().contains(card2.getCardTerritory())) {
-				Territory temp = null;
-				while (plyrTerItr.hasNext()) {
-					temp = plyrTerItr.next();
-					if (card1.getCardTerritory() == temp)
-						break;
-				}
-				temp.addUnits(2, p.getTeam());
-			}
-			plyrTerItr = p.getTerritoriesOwned().iterator();
-			if (p.getTerritoriesOwned().contains(card3.getCardTerritory())) {
-				Territory temp = null;
-				while (plyrTerItr.hasNext()) {
-					temp = plyrTerItr.next();
-					if (card1.getCardTerritory() == temp)
-						break;
-				}
-				temp.addUnits(2, p.getTeam());
-			}
+			if (p.getTerritoriesOwned().contains(card1.getCardTerritory())
+					|| p.getTerritoriesOwned().contains(
+							card2.getCardTerritory())
+					|| p.getTerritoriesOwned().contains(
+							card3.getCardTerritory()))
+				// Special award: award 2 units (and only two units(no more
+				// extra units if more than one card matches)):
+				p.setNewUnits(p.getNewUnits() + 2);
+
+			// ...
+			// /removed code: check commit message for code removed
+			// ...
+
 			// Normal award: award unitMultiplier units to player
 			p.setNewUnits(p.getNewUnits() + unitMultiplier);
 
@@ -160,6 +143,8 @@ public class Game extends CommandInterface {
 	public boolean claimTerritory(Player p, Territory territory) {
 		if (territory.getUnitsOnTerritory() == 0) {
 			boolean work = territory.addUnits(1, p.getTeam());
+
+			p.getTerritoriesOwned().add(territory);
 			this.notifyObservers(p);
 			this.notifyObservers(territory);
 			return work;
@@ -330,6 +315,7 @@ public class Game extends CommandInterface {
 		move.setP(p);
 		move.setDest(dest);
 		move.setOrig(orig);
+		this.notifyObservers(move);
 
 	}
 
@@ -343,6 +329,7 @@ public class Game extends CommandInterface {
 			unitMultiplier += 2;
 		else
 			unitMultiplier += 5;
+		this.notifyObservers(unitMultiplier);
 	}
 
 	/**
