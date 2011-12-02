@@ -36,7 +36,7 @@ public class MasterView extends javax.swing.JFrame {
 	//Added to get close size while still being variable
 	Image mapImage = new ImageIcon("images/map2.png").getImage();
 	private void setUpGUICode(){
-		this.setSize(mapImage.getWidth(null), mapImage.getHeight(null) + 80); //680
+		this.setSize(mapImage.getWidth(null)+50, mapImage.getHeight(null) + 280); //680
 //		this.setResizable(false);
 		setLocation(10,10);
 		setTitle("Risk");
@@ -121,6 +121,28 @@ public class MasterView extends javax.swing.JFrame {
 			titleView.setLayout(new GridLayout());
 			body.add(titleView, "Title");
 			
+		}
+		if(v == Views.HOST){
+			JPanel hostView  = new JPanel();
+			
+			hostView.setVisible(true);
+			hostView.add(new HostView(this));
+			body.add(hostView, "Host");
+			
+			card.show(body, "Host");
+			
+			body.getComponent(0).requestFocusInWindow();
+		}
+		if(v == Views.JOIN){
+			JPanel joinView  = new JPanel();
+			
+			joinView.setVisible(true);
+			joinView.add(new JoinView(this));
+			body.add(joinView, "Join");
+			
+			card.show(body, "Join");
+			
+			body.getComponent(0).requestFocusInWindow();
 		}
 	}
 	

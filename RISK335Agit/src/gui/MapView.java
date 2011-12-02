@@ -6,6 +6,8 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -17,6 +19,7 @@ import java.util.Observer;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -36,6 +39,7 @@ public class MapView extends MasterViewPanel implements Observer{
 	BufferedImage buffImage;
 	Game newGame;
 	Map gameMap;
+	JPanel mapBox = new JPanel();
 	HashMap<String, Continent> continents;
 	
 	HashMap<String, Territory> territories;
@@ -54,15 +58,23 @@ public class MapView extends MasterViewPanel implements Observer{
 		buffImage = new BufferedImage(mapImage.getWidth(null),mapImage.getHeight(null),BufferedImage.TYPE_INT_ARGB);
 		
 		
+		mapBox.setPreferredSize(new Dimension(mapImage.getWidth(null),mapImage.getHeight(null)));
+		
+		
 		Graphics g = buffImage.getGraphics();
-	    g.drawImage(mapImage, 0, 0, null);
-
-	    this.add(new JLabel(new ImageIcon(buffImage)));
+	    g.drawImage(mapImage, 0, 0, mapBox);
+//	    
+//	   this.add(new JLabel(new ImageIcon(buffImage)));
+	   mapBox.add(new JLabel(new ImageIcon(buffImage)));
+	   mapBox.add(new JLabel(new ImageIcon("images/map2.png")));
+	   
+	   this.add(mapBox);
+	   
 		this.addMouseListener(new mouse());
 		
 		//Adds motion listener for tooltip text
 		this.addMouseMotionListener(new mouseMove());
-//		setUpUserBar();
+		setUpUserBar();
 		
 	}
 	
@@ -70,9 +82,10 @@ public class MapView extends MasterViewPanel implements Observer{
 		JPanel userBar = new JPanel();
 		userBar.setLayout(new BoxLayout(userBar, BoxLayout.X_AXIS));
 		userBar.setVisible(true);
-		userBar.setSize(mapImage.getWidth(null), 300);
+		userBar.setPreferredSize(new Dimension(mapImage.getWidth(null) -50, 200));
+		
 		this.add(userBar);
-		JLabel turn = new JLabel("  It is "+ "BLANK" +"\'s turn");
+		JLabel turn = new JLabel("\tIt is "+ "BLANK" +"\'s turn");
 		JButton surrender = new JButton("Surrender");
 		
 		JButton turnInCards = new JButton("Turn in Cards");
@@ -81,24 +94,49 @@ public class MapView extends MasterViewPanel implements Observer{
 		
 		JButton attack = new JButton("Attack");
 		JButton move = new JButton("Move");
+		move.addActionListener(new moveButtonListener());
 		JButton endTurn = new JButton("End Turn");
-//		userBar.add(surrender);
 		
+		//Main buttons
 		JPanel	buttonBox = new JPanel();
-		buttonBox.setLayout(new GridLayout(4, 1));
+		buttonBox.setLayout(new GridLayout(5, 1));
 		buttonBox.add(turn);
 		buttonBox.add(turnInCards);
 		buttonBox.add(placeUnits);
 		buttonBox.add(nextPhase);
-		
+		buttonBox.add(surrender);
 		userBar.add(buttonBox);
 		
+		//Attack box
+		JPanel attackBox = new JPanel();
+		attackBox.setLayout(new GridLayout(5,1));
+		attackBox.add(new JLabel(""));
+		attackBox.add(attack);
+		attackBox.add(move);
+		attackBox.add(endTurn);
+		attackBox.add(new JLabel(""));
 		
+		userBar.add(attackBox);
+		
+		//Chat area
+		JPanel textArea = new JPanel();
+		textArea.setLayout(new BoxLayout(textArea, BoxLayout.Y_AXIS));
+
 		JTextArea chatArea = new JTextArea(2, 15);
+		JTextArea typeArea = new JTextArea(1, 10);
+		chatArea.setLineWrap(true);
+		chatArea.setEditable(false);
 		
 		JScrollPane scrollPane = new JScrollPane(chatArea);
-		setPreferredSize(new Dimension(320, 110));
-		userBar.add(scrollPane, BorderLayout.CENTER);
+		scrollPane.setPreferredSize(new Dimension(150, 200));
+		textArea.add(scrollPane);
+		textArea.add(typeArea);
+		userBar.add(textArea);
+		
+		
+		chatArea.setText("Welcome to Risk!\nUse the buttons to the left to make your move!\nHover over any territory to view it's name!\n"+
+						"Enter text below to talk to your fellow players, this is your chat box!");
+		
 	}
 	
 	private void setUpGame(){
@@ -114,12 +152,26 @@ public class MapView extends MasterViewPanel implements Observer{
 		//TO DO: Working on making these flags appear over/on every owned territory on repaint, gonna make them small to fit new map better.
 		territories.get("Alaska").setOwner(Team.GREEN);
 		if(territories.get("Alaska").getOwner() != null){
-			 g.drawImage(new ImageIcon("images/greenflag.png").getImage(), 800, 16, m);
+//			
+//			char[] name = territories.get("Alaska").getOwner().toString().toCharArray();
+//			g.drawChars(name, 0, 5, 317, 178);
+			mapBox.add(new JLabel(territories.get("Alaska").getOwner().toString()));
 		}
 			
 		
 		
 
+	}
+	private class moveButtonListener implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+//			System.out.print("To be implemented...");
+//			JOptionPane.showMessageDialog(null, "Choose your move!");
+			
+			
+		}
+		
 	}
 	private class mouse implements MouseListener{
 
