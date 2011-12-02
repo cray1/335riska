@@ -8,6 +8,8 @@ import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -23,6 +25,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
 
 
 import javax.swing.JLabel;
@@ -41,7 +44,8 @@ public class MapView extends MasterViewPanel implements Observer{
 	Map gameMap;
 	JPanel mapBox = new JPanel();
 	HashMap<String, Continent> continents;
-	
+	JTextArea chatArea ;
+	JTextField typeArea ;
 	HashMap<String, Territory> territories;
 	Image mapImage;
 	public MapView(MasterView m) {
@@ -121,22 +125,25 @@ public class MapView extends MasterViewPanel implements Observer{
 		//Chat area
 		JPanel textArea = new JPanel();
 		textArea.setLayout(new BoxLayout(textArea, BoxLayout.Y_AXIS));
+		chatArea = new JTextArea(2, 15);
+		typeArea = new JTextField();
 
-		JTextArea chatArea = new JTextArea(2, 15);
-		JTextArea typeArea = new JTextArea(1, 10);
+		
 		chatArea.setLineWrap(true);
 		chatArea.setEditable(false);
-		
+		typeArea.addActionListener(new retListener());
 		JScrollPane scrollPane = new JScrollPane(chatArea);
 		scrollPane.setPreferredSize(new Dimension(150, 200));
 		textArea.add(scrollPane);
 		textArea.add(typeArea);
 		userBar.add(textArea);
+		//experiment
+		
 		
 		
 		chatArea.setText("Welcome to Risk!\nUse the buttons to the left to make your move!\nHover over any territory to view it's name!\n"+
-						"Enter text below to talk to your fellow players, this is your chat box!");
-		
+						"Enter text below to talk to your fellow players, this is your chat box! \n");
+		m.client.addObserver(this);
 	}
 	
 	private void setUpGame(){
@@ -420,9 +427,26 @@ public class MapView extends MasterViewPanel implements Observer{
 		return "";
 		
 	}
+	private class retListener implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			
+				m.client.writeObject(typeArea.getText());
+				typeArea.setText("");
+				typeArea.grabFocus();
+			
+			
+		}
+		
+	}
 	@Override
 	public void update(Observable arg0, Object arg1) {
-		// TODO Auto-generated method stub
+		if (arg1 instanceof String){
+			chatArea.append((String) arg1);
+			chatArea.setCaretPosition(chatArea.getDocument().getLength());
+		}
+			
 		
 	}
 	

@@ -76,8 +76,18 @@ public class TitleView extends MasterViewPanel {
 		public void actionPerformed(ActionEvent arg0) {
 			String port = JOptionPane.showInputDialog(
 					"Enter the port you want to listen on:", null);
-			m.changeView(Views.MAP, null);
+			
 			m.server = new RiskiServer(port);
+			String name = JOptionPane.showInputDialog(
+					"Enter Your name:", null);
+			try{
+				m.client = new RiskiClient(name, "127.0.0.1", Integer.parseInt(port));
+				
+			}catch (Exception e){
+				m.client = new RiskiClient(name, "127.0.0.1", 4000);
+			}
+			m.changeView(Views.MAP, null);
+			
 		}
 
 	}
