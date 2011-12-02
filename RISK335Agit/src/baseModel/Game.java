@@ -73,9 +73,9 @@ public class Game extends CommandInterface {
 	 * @author Chris Ray Created on 8:27:35 PM Nov 26, 2011
 	 */
 	@Override
-	public boolean turnInCards(Player p, TerritoryCard card1, TerritoryCard card2, TerritoryCard card3) {
-		if (isValidTurnin(card1,card2,card3)) 
-		{
+	public boolean turnInCards(Player p, TerritoryCard card1,
+			TerritoryCard card2, TerritoryCard card3) {
+		if (isValidTurnin(card1, card2, card3)) {
 			p.getCards().remove(card1);
 			p.getCards().remove(card2);
 			p.getCards().remove(card3);
@@ -84,11 +84,9 @@ public class Game extends CommandInterface {
 			// player
 			// if so, award the player two more units
 			Iterator<Territory> plyrTerItr = p.getTerritoriesOwned().iterator();
-			if (p.getTerritoriesOwned().contains(card1.getCardTerritory()))
-			{
+			if (p.getTerritoriesOwned().contains(card1.getCardTerritory())) {
 				Territory temp = null;
-				while (plyrTerItr.hasNext())
-				{
+				while (plyrTerItr.hasNext()) {
 					temp = plyrTerItr.next();
 					if (card1.getCardTerritory() == temp)
 						break;
@@ -96,24 +94,20 @@ public class Game extends CommandInterface {
 				temp.addUnits(2, p.getTeam());
 			}
 			plyrTerItr = p.getTerritoriesOwned().iterator();
-			if (p.getTerritoriesOwned().contains(card2.getCardTerritory()))
-			{
+			if (p.getTerritoriesOwned().contains(card2.getCardTerritory())) {
 				Territory temp = null;
-				while (plyrTerItr.hasNext())
-				{
-					temp = (Territory) plyrTerItr.next();
+				while (plyrTerItr.hasNext()) {
+					temp = plyrTerItr.next();
 					if (card1.getCardTerritory() == temp)
 						break;
 				}
 				temp.addUnits(2, p.getTeam());
 			}
 			plyrTerItr = p.getTerritoriesOwned().iterator();
-			if (p.getTerritoriesOwned().contains(card3.getCardTerritory()))
-			{
+			if (p.getTerritoriesOwned().contains(card3.getCardTerritory())) {
 				Territory temp = null;
-				while (plyrTerItr.hasNext())
-				{
-					temp = (Territory) plyrTerItr.next();
+				while (plyrTerItr.hasNext()) {
+					temp = plyrTerItr.next();
 					if (card1.getCardTerritory() == temp)
 						break;
 				}
@@ -130,15 +124,20 @@ public class Game extends CommandInterface {
 			return true;
 	}
 
-	private boolean isValidTurnin(TerritoryCard card1, TerritoryCard card2, TerritoryCard card3) {
+	private boolean isValidTurnin(TerritoryCard card1, TerritoryCard card2,
+			TerritoryCard card3) {
 		// 2 and a wildcard or 1 and 2 wildcards
 		ArrayList<TerritoryCard> cards = new ArrayList<TerritoryCard>();
 		cards.add(card1);
 		cards.add(card2);
 		cards.add(card3);
-		if ((card1.getCardType() == CardType.WILDCARD)||(card2.getCardType() == CardType.WILDCARD)||(card3.getCardType() == CardType.WILDCARD))
+		if ((card1.getCardType() == CardType.WILDCARD)
+				|| (card2.getCardType() == CardType.WILDCARD)
+				|| (card3.getCardType() == CardType.WILDCARD))
 			return true;
-		else if ((card1.getCardType() == card2.getCardType()) && (card2.getCardType() == card2.getCardType()))
+		// 3 of a kind
+		else if ((card1.getCardType() == card2.getCardType())
+				&& (card2.getCardType() == card3.getCardType()))
 			return true;
 		// 1 of each
 		else if (cards.contains(CardType.CANNON)
@@ -159,8 +158,7 @@ public class Game extends CommandInterface {
 	 */
 	@Override
 	public boolean claimTerritory(Player p, Territory territory) {
-		if (territory.getUnitsOnTerritory() == 0) 
-		{
+		if (territory.getUnitsOnTerritory() == 0) {
 			boolean work = territory.addUnits(1, p.getTeam());
 			this.notifyObservers(p);
 			this.notifyObservers(territory);
@@ -169,10 +167,10 @@ public class Game extends CommandInterface {
 		return false;
 	}
 
-	public boolean addOneUnit(Player p, Territory territory)
-	{
-		return territory.addUnits(1, p.getTeam());		
+	public boolean addOneUnit(Player p, Territory territory) {
+		return territory.addUnits(1, p.getTeam());
 	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -466,8 +464,5 @@ public class Game extends CommandInterface {
 	public void resetUnitMultiplier() {
 		this.unitMultiplier = 4;
 	}
-	
-	
-	
 
 }
