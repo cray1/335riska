@@ -158,17 +158,21 @@ public class Game extends CommandInterface {
 	 * @author Chris Ray Created on 8:27:35 PM Nov 26, 2011
 	 */
 	@Override
-	public boolean placeOneUnitOnTerritory(Player p, Territory territory) {
-		if (territory.getUnitsOnTerritory() == 0) {
-			territory.setUnitsOnTerritory(territory.getUnitsOnTerritory() + 1);
-			territory.setOwner(p.getTeam());
-			p.getTerritoriesOwned().add(territory);
+	public boolean claimTerritory(Player p, Territory territory) {
+		if (territory.getUnitsOnTerritory() == 0) 
+		{
+			boolean work = territory.addUnits(1, p.getTeam());
 			this.notifyObservers(p);
 			this.notifyObservers(territory);
+			return work;
 		}
 		return false;
 	}
 
+	public boolean addOneUnit(Player p, Territory territory)
+	{
+		return territory.addUnits(1, p.getTeam());		
+	}
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -463,13 +467,7 @@ public class Game extends CommandInterface {
 		this.unitMultiplier = 4;
 	}
 	
-	public void setUpGame()
-	{
-		
-	}
-	public void takeTurn(Player p)
-	{
-		
-	}
+	
+	
 
 }

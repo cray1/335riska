@@ -73,7 +73,7 @@ public abstract class CommandInterface extends Observable {
 	 * @return boolean representing rather or not the command went through
 	 * 
 	 */
-	public abstract boolean placeOneUnitOnTerritory(Player p,
+	public abstract boolean claimTerritory(Player p,
 			Territory territory);
 
 	/**
