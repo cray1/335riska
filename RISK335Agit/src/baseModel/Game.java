@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 
 /**
  * @author Chris Ray Created on 8:15:11 PM Nov 26, 2011
@@ -23,7 +24,18 @@ public class Game extends CommandInterface {
 	private ArrayList<Die> defendDice;
 	private ArrayList<Die> attackDice;
 	private Player activePlayer;
+	private List<String> turnPhase;
+	private String currentPhase = "";
 
+	private String newPh = "New Units Phase";
+	private String attackPh = "Attack Phase";
+	private String movePh = "Move Phase";
+
+	/**
+	 * @author Chris Ray Created on 8:57:30 AM Dec 2, 2011
+	 * @return
+	 * 
+	 */
 	public boolean startGame() {
 
 		if (checkSetUp()) {
@@ -61,6 +73,10 @@ public class Game extends CommandInterface {
 		players = new LinkedList<Player>();
 		setActivePlayer(new Player(null)); // placeholder
 
+		turnPhase = new LinkedList<String>();
+		turnPhase.add(newPh);
+		turnPhase.add(attackPh);
+		turnPhase.add(movePh);
 	}
 
 	/*
@@ -94,7 +110,7 @@ public class Game extends CommandInterface {
 	@Override
 	public boolean turnInCards(Player p, TerritoryCard card1,
 			TerritoryCard card2, TerritoryCard card3) {
-		if (isValidTurnin(card1, card2, card3)) {
+		if (isValidTurnin(card1, card2, card3) && (currentPhase == newPh)) {
 			p.getCards().remove(card1);
 			p.getCards().remove(card2);
 			p.getCards().remove(card3);
@@ -191,7 +207,7 @@ public class Game extends CommandInterface {
 			int numOfAttackingDice) {
 		// Check to see if the two territories are neighbors first, if not,
 		// nothing happens, Attack Fails.
-		if (orig.getNeighbors().contains(dest)) {
+		if (orig.getNeighbors().contains(dest) && (currentPhase == attackPh)) {
 
 			int defenders = dest.getUnitsOnTerritory();
 			if (defenders > 2)
@@ -496,6 +512,23 @@ public class Game extends CommandInterface {
 	 */
 	public void setActivePlayer(Player activePlayer) {
 		this.activePlayer = activePlayer;
+	}
+
+	/**
+	 * @return the currentPhase
+	 * @author Chris Ray Created on 8:52:07 AM Dec 2, 2011
+	 */
+	public String getCurrentPhase() {
+		return currentPhase;
+	}
+
+	/**
+	 * @param currentPhase
+	 *            the currentPhase to set
+	 * @author Chris Ray Created on 8:52:07 AM Dec 2, 2011
+	 */
+	public void setCurrentPhase(String currentPhase) {
+		this.currentPhase = currentPhase;
 	}
 
 }
