@@ -24,9 +24,10 @@ public class Game extends CommandInterface {
 	private ArrayList<Die> defendDice;
 	private ArrayList<Die> attackDice;
 	private Player activePlayer;
+	private Iterator<Player> activeItr;
 	private List<String> turnPhase;
 	private String currentPhase = "";
-
+	
 	private String newPh = "New Units Phase";
 	private String attackPh = "Attack Phase";
 	private String movePh = "Move Phase";
@@ -65,18 +66,17 @@ public class Game extends CommandInterface {
 		firstTerritory = true;
 		move = new Move();
 		setPlayers(new LinkedList<Player>());
-
+		activeItr = players.iterator();
 		// defend Dice
 		defendDice = new ArrayList<Die>();
 		// attack Dice
 		attackDice = new ArrayList<Die>();
-		players = new LinkedList<Player>();
-		setActivePlayer(new Player(null)); // placeholder
+		setActivePlayer(activeItr.next()); // placeholder
 
-		turnPhase = new LinkedList<String>();
+		/*turnPhase = new LinkedList<String>();
 		turnPhase.add(newPh);
 		turnPhase.add(attackPh);
-		turnPhase.add(movePh);
+		turnPhase.add(movePh);*/
 	}
 
 	/*
@@ -87,10 +87,10 @@ public class Game extends CommandInterface {
 	 * @author Chris Ray Created on 8:27:35 PM Nov 26, 2011
 	 */
 	@Override
-	public boolean drawCard(Player p) {
+	public boolean drawCard() {
 		try {
-			p.getCards().add(deck.drawCard());
-			this.notifyObservers(p);
+			activePlayer.getCards().add(deck.drawCard());
+			this.notifyObservers(activePlayer);
 			this.notifyObservers(deck);
 			return true;
 		} catch (Exception e) {
@@ -108,35 +108,35 @@ public class Game extends CommandInterface {
 	 * @author Chris Ray Created on 8:27:35 PM Nov 26, 2011
 	 */
 	@Override
-	public boolean turnInCards(Player p, TerritoryCard card1,
+	public boolean turnInCards(TerritoryCard card1,
 			TerritoryCard card2, TerritoryCard card3) {
 		if (isValidTurnin(card1, card2, card3)) {
-			p.getCards().remove(card1);
-			p.getCards().remove(card2);
-			p.getCards().remove(card3);
+			activePlayer.getCards().remove(card1);
+			activePlayer.getCards().remove(card2);
+			activePlayer.getCards().remove(card3);
 
 			// Check to see if any of the cards territories are owned by the
 			// player
 			// if so, award the player two more units
-			if (p.getTerritoriesOwned().contains(card1.getCardTerritory())
-					|| p.getTerritoriesOwned().contains(
+			if (activePlayer.getTerritoriesOwned().contains(card1.getCardTerritory())
+					|| activePlayer.getTerritoriesOwned().contains(
 							card2.getCardTerritory())
-					|| p.getTerritoriesOwned().contains(
+					|| activePlayer.getTerritoriesOwned().contains(
 							card3.getCardTerritory()))
 				// Special award: award 2 units (and only two units(no more
 				// extra units if more than one card matches)):
-				p.setNewUnits(p.getNewUnits() + 2);
+				activePlayer.setNewUnits(activePlayer.getNewUnits() + 2);
 
 			// ...
 			// /removed code: check commit message for code removed
 			// ...
 
 			// Normal award: award unitMultiplier units to player
-			p.setNewUnits(p.getNewUnits() + unitMultiplier);
+			activePlayer.setNewUnits(activePlayer.getNewUnits() + unitMultiplier);
 
 			// move the unitMultiplier to the next position
 			unitMultiplierUp();
-			this.notifyObservers(p);
+			this.notifyObservers(activePlayer);
 			return true;
 		} else
 			return true;
@@ -175,22 +175,22 @@ public class Game extends CommandInterface {
 	 * @author Chris Ray Created on 8:27:35 PM Nov 26, 2011
 	 */
 	@Override
-	public boolean claimTerritory(Player p, Territory territory) {
+	public boolean claimTerritory(Territory territory) {
 		if (territory.getUnitsOnTerritory() == 0) {
-			boolean work = territory.addUnits(1, p.getTeam());
-			territory.setOwningTeam(p.getTeam());
-			territory.setOwningPlayer(p);
+			boolean work = territory.addUnits(1, activePlayer.getTeam());
+			territory.setOwningTeam(activePlayer.getTeam());
+			territory.setOwningPlayer(activePlayer);
 
-			p.getTerritoriesOwned().add(territory);
-			this.notifyObservers(p);
+			activePlayer.getTerritoriesOwned().add(territory);
+			this.notifyObservers(activePlayer);
 			this.notifyObservers(territory);
 			return work;
 		}
 		return false;
 	}
 
-	public boolean addOneUnit(Player p, Territory territory) {
-		return territory.addUnits(1, p.getTeam());
+	public boolean addOneUnit(Territory territory) {
+		return territory.addUnits(1, activePlayer.getTeam());
 	}
 
 	/*
@@ -203,8 +203,8 @@ public class Game extends CommandInterface {
 	 * only) 11/30/11 7:26 PM
 	 */
 	@Override
-	public boolean attackTerritory(Player p, Territory orig, Territory dest,
-			int numOfAttackingDice) {
+	public boolean attackTerritory(Territory orig, Territory dest,int numOfAttackingDice) 
+	{
 		// Check to see if the two territories are neighbors first, if not,
 		// nothing happens, Attack Fails.
 		if (orig.getNeighbors().contains(dest)) {
@@ -216,7 +216,7 @@ public class Game extends CommandInterface {
 			// the attacking territory must be the player's, and there has to be
 			// at least one unit left on the original territory.
 			// Also max of 3 attacking Dice
-			if ((orig.getOwningTeam() == p.getTeam())
+			if ((orig.getOwningTeam() == activePlayer.getTeam())
 					&& (numOfAttackingDice < orig.getUnitsOnTerritory())
 					&& (numOfAttackingDice < 4) && (numOfAttackingDice >= 1)) {
 				// records the beginning and ending number of attacking units
@@ -263,13 +263,13 @@ public class Game extends CommandInterface {
 					currentOwningPlayer.getTerritoriesOwned().remove(dest);
 					// check if current has no territories
 					if (currentOwningPlayer.getNumberOfTerritories() == 0) {
-						// give his or her cards to player p
-						p.getCards().addAll(currentOwningPlayer.getCards());
+						// give his or her cards to player activePlayer
+						activePlayer.getCards().addAll(currentOwningPlayer.getCards());
 
 						// remove current from players List
 						players.remove(currentOwningPlayer);
 						/*
-						 * while(p.getCards().size()>4) { //request turn in
+						 * while(activePlayer.getCards().size()>4) { //request turn in
 						 * cards from GUI }
 						 */
 						this.notifyObservers(players);
@@ -277,24 +277,24 @@ public class Game extends CommandInterface {
 					}
 					if (firstTerritory) {
 						// add card
-						drawCard(p);
+						drawCard();
 						firstTerritory = false;
 					}
 
-					move(p, orig, dest, remainingArmy);
-					if (p.getTerritoriesOwned().containsAll(
+					move(orig, dest, remainingArmy);
+					if (activePlayer.getTerritoriesOwned().containsAll(
 							map.getMap().get(dest.getParentContinent())
 									.getChildren()))
 						// award another territory card for capturing a
 						// continent
-						drawCard(p);
-					updateMove(p, orig, dest);
+						drawCard();
+					updateMove(activePlayer, orig, dest);
 				}
 
 				/**
 				 * @author Chris Ray 12/01/11 1:53 AM
 				 */
-				this.notifyObservers(p);
+				this.notifyObservers(activePlayer);
 				this.notifyObservers(orig);
 				this.notifyObservers(dest);
 
@@ -312,21 +312,18 @@ public class Game extends CommandInterface {
 	 * 
 	 * @author Chris Ray Created on 1:54:39 AM Nov 27, 2011
 	 */
-	@Override
-	public boolean move(Player p, Territory orig, Territory dest,
-			int numOfUnitsToMove) {
+	
+	public boolean move(Territory orig, Territory dest,int numOfUnitsToMove) {
 		try {
 			// Check to see if the two territories are neighbors first, if not,
 			// nothing happens, Move Fails.
 			if (orig.getNeighbors().contains(dest))
-				if ((orig.getOwningTeam() == p.getTeam())
+				if ((orig.getOwningTeam() == activePlayer.getTeam())
 						&& ((orig.getUnitsOnTerritory() > 1) && (numOfUnitsToMove < orig
 								.getUnitsOnTerritory())))
-					if ((dest.getUnitsOnTerritory() <= 0)
-							|| (dest.getOwningTeam() == p.getTeam())) {
-
+					if ((dest.getUnitsOnTerritory() <= 0)|| (dest.getOwningTeam() == activePlayer.getTeam())) 
+					{
 						// move is valid...proceed.
-
 						// if numberOfUnitsToMove > orig.getUnitsOnTerritory()
 						// move orig.getUnitsOnTerritory()-1 units
 						if (numOfUnitsToMove > orig.getUnitsOnTerritory()) {
@@ -340,8 +337,8 @@ public class Game extends CommandInterface {
 						}
 						this.notifyObservers(orig);
 						this.notifyObservers(dest);
-						this.notifyObservers(p);
-						updateMove(p, orig, dest);
+						this.notifyObservers(activePlayer);
+						updateMove(activePlayer, orig, dest);
 						return true;
 					}
 			return false;
