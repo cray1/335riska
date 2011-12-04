@@ -66,12 +66,12 @@ public class Game extends CommandInterface {
 		firstTerritory = true;
 		move = new Move();
 		setPlayers(new LinkedList<Player>());
-		activeItr = players.iterator();
+		//activeItr = players.iterator();
 		// defend Dice
 		defendDice = new ArrayList<Die>();
 		// attack Dice
 		attackDice = new ArrayList<Die>();
-		setActivePlayer(activeItr.next()); // placeholder
+		//setActivePlayer(activeItr.next()); // placeholder
 
 		/*turnPhase = new LinkedList<String>();
 		turnPhase.add(newPh);
