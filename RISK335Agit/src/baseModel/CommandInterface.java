@@ -26,7 +26,7 @@ public abstract class CommandInterface extends Observable {
 	 * 
 	 * 
 	 */
-	public abstract boolean move(Territory orig, Territory dest,
+	public abstract boolean move(Player p, Territory orig, Territory dest,
 			int numOfUnitsToMove);
 
 	/**
@@ -49,7 +49,7 @@ public abstract class CommandInterface extends Observable {
 	 * @return True if successful, false otherwise
 	 * 
 	 */
-	public abstract boolean drawCard();
+	public abstract boolean drawCard(Player p);
 
 	/**
 	 * @author Chris Ray Created on 8:26:32 PM Nov 26, 2011
@@ -58,7 +58,8 @@ public abstract class CommandInterface extends Observable {
 	 * @return boolean representing rather or not the command went through
 	 * 
 	 */
-	public abstract boolean turnInCards(TerritoryCard card1, TerritoryCard card2, TerritoryCard card3);
+	public abstract boolean turnInCards(Player p,
+			TerritoryCard card1, TerritoryCard card2, TerritoryCard card3);
 
 	/**
 	 * This is only for when you are placing the first unit on a territory
@@ -72,7 +73,8 @@ public abstract class CommandInterface extends Observable {
 	 * @return boolean representing rather or not the command went through
 	 * 
 	 */
-	public abstract boolean claimTerritory(Territory territory);
+	public abstract boolean claimTerritory(Player p,
+			Territory territory);
 
 	/**
 	 * @author Stephen Brown at 6:17pm 11/29/11, Christopher Ray (Dice changes
@@ -85,7 +87,7 @@ public abstract class CommandInterface extends Observable {
 	 * @return boolean representing rather or not the command went through
 	 * 
 	 */
-	public abstract boolean attackTerritory(Territory origin,
+	public abstract boolean attackTerritory(Player p, Territory origin,
 			Territory destination, int numOfAttackingDice);
 
 }
