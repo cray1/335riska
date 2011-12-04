@@ -27,7 +27,7 @@ public class Game extends CommandInterface {
 	private Iterator<Player> activeItr;
 	private List<String> turnPhase;
 	private String currentPhase = "";
-
+	
 	private String newPh = "New Units Phase";
 	private String attackPh = "Attack Phase";
 	private String movePh = "Move Phase";
@@ -73,10 +73,10 @@ public class Game extends CommandInterface {
 		attackDice = new ArrayList<Die>();
 		setActivePlayer(activeItr.next()); // placeholder
 
-		/*
-		 * turnPhase = new LinkedList<String>(); turnPhase.add(newPh);
-		 * turnPhase.add(attackPh); turnPhase.add(movePh);
-		 */
+		/*turnPhase = new LinkedList<String>();
+		turnPhase.add(newPh);
+		turnPhase.add(attackPh);
+		turnPhase.add(movePh);*/
 	}
 
 	/*
@@ -108,8 +108,8 @@ public class Game extends CommandInterface {
 	 * @author Chris Ray Created on 8:27:35 PM Nov 26, 2011
 	 */
 	@Override
-	public boolean turnInCards(TerritoryCard card1, TerritoryCard card2,
-			TerritoryCard card3) {
+	public boolean turnInCards(TerritoryCard card1,
+			TerritoryCard card2, TerritoryCard card3) {
 		if (isValidTurnin(card1, card2, card3)) {
 			activePlayer.getCards().remove(card1);
 			activePlayer.getCards().remove(card2);
@@ -118,8 +118,7 @@ public class Game extends CommandInterface {
 			// Check to see if any of the cards territories are owned by the
 			// player
 			// if so, award the player two more units
-			if (activePlayer.getTerritoriesOwned().contains(
-					card1.getCardTerritory())
+			if (activePlayer.getTerritoriesOwned().contains(card1.getCardTerritory())
 					|| activePlayer.getTerritoriesOwned().contains(
 							card2.getCardTerritory())
 					|| activePlayer.getTerritoriesOwned().contains(
@@ -133,8 +132,7 @@ public class Game extends CommandInterface {
 			// ...
 
 			// Normal award: award unitMultiplier units to player
-			activePlayer.setNewUnits(activePlayer.getNewUnits()
-					+ unitMultiplier);
+			activePlayer.setNewUnits(activePlayer.getNewUnits() + unitMultiplier);
 
 			// move the unitMultiplier to the next position
 			unitMultiplierUp();
@@ -205,8 +203,8 @@ public class Game extends CommandInterface {
 	 * only) 11/30/11 7:26 PM
 	 */
 	@Override
-	public boolean attackTerritory(Territory orig, Territory dest,
-			int numOfAttackingDice) {
+	public boolean attackTerritory(Territory orig, Territory dest,int numOfAttackingDice) 
+	{
 		// Check to see if the two territories are neighbors first, if not,
 		// nothing happens, Attack Fails.
 		if (orig.getNeighbors().contains(dest)) {
@@ -266,14 +264,13 @@ public class Game extends CommandInterface {
 					// check if current has no territories
 					if (currentOwningPlayer.getNumberOfTerritories() == 0) {
 						// give his or her cards to player activePlayer
-						activePlayer.getCards().addAll(
-								currentOwningPlayer.getCards());
+						activePlayer.getCards().addAll(currentOwningPlayer.getCards());
 
 						// remove current from players List
 						players.remove(currentOwningPlayer);
 						/*
-						 * while(activePlayer.getCards().size()>4) { //request
-						 * turn in cards from GUI }
+						 * while(activePlayer.getCards().size()>4) { //request turn in
+						 * cards from GUI }
 						 */
 						this.notifyObservers(players);
 
@@ -315,8 +312,8 @@ public class Game extends CommandInterface {
 	 * 
 	 * @author Chris Ray Created on 1:54:39 AM Nov 27, 2011
 	 */
-
-	public boolean move(Territory orig, Territory dest, int numOfUnitsToMove) {
+	
+	public boolean move(Territory orig, Territory dest,int numOfUnitsToMove) {
 		try {
 			// Check to see if the two territories are neighbors first, if not,
 			// nothing happens, Move Fails.
@@ -324,8 +321,8 @@ public class Game extends CommandInterface {
 				if ((orig.getOwningTeam() == activePlayer.getTeam())
 						&& ((orig.getUnitsOnTerritory() > 1) && (numOfUnitsToMove < orig
 								.getUnitsOnTerritory())))
-					if ((dest.getUnitsOnTerritory() <= 0)
-							|| (dest.getOwningTeam() == activePlayer.getTeam())) {
+					if ((dest.getUnitsOnTerritory() <= 0)|| (dest.getOwningTeam() == activePlayer.getTeam())) 
+					{
 						// move is valid...proceed.
 						// if numberOfUnitsToMove > orig.getUnitsOnTerritory()
 						// move orig.getUnitsOnTerritory()-1 units
