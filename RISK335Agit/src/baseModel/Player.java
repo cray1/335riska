@@ -6,11 +6,12 @@
 package baseModel;
 
 import java.util.ArrayList;
+import java.util.Observable;
 
 /**
  * @author Chris Ray Created on 6:02:03 PM Nov 25, 2011
  */
-public class Player {
+public class Player extends Observable {
 
 	private int numberOfUnits;
 	private int numberOfTerritories;
