@@ -10,11 +10,13 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 
 /**
  * @author Chris Ray Created on 8:15:11 PM Nov 26, 2011
  */
-public class Game extends CommandInterface {
+public class Game extends CommandInterface implements Observer {
 	private CardDeck deck;
 	private int unitMultiplier;
 	private Map map;
@@ -41,6 +43,10 @@ public class Game extends CommandInterface {
 
 		if (checkSetUp()) {
 			activePlayer = players.getFirst();
+			// check if any players are AI, if so add them as observers
+			for (Player p : players)
+				if (p instanceof PlayerAI)
+					this.addObserver((PlayerAI) p);
 			return true;
 
 		} else
@@ -186,6 +192,9 @@ public class Game extends CommandInterface {
 			activePlayer.getTerritoriesOwned().add(territory);
 			this.notifyObservers(activePlayer);
 			this.notifyObservers(territory);
+			this.notifyObservers(map);
+
+			this.notifyObservers(this);// only useful for AI
 			return work;
 		}
 		return false;
@@ -193,7 +202,14 @@ public class Game extends CommandInterface {
 
 	@Override
 	public boolean addOneUnit(Territory territory) {
-		return territory.addUnits(1, activePlayer.getTeam());
+		if (territory.addUnits(1, activePlayer.getTeam())) {
+			this.notifyObservers(map);
+			this.notifyObservers(territory);
+			this.notifyObservers(this);// only useful for AI
+			return true;
+		} else
+			return false;
+
 	}
 
 	/*
@@ -301,6 +317,7 @@ public class Game extends CommandInterface {
 				this.notifyObservers(activePlayer);
 				this.notifyObservers(orig);
 				this.notifyObservers(dest);
+				this.notifyObservers(this);// only useful for AI
 
 				return true;
 			}
@@ -343,6 +360,7 @@ public class Game extends CommandInterface {
 						this.notifyObservers(orig);
 						this.notifyObservers(dest);
 						this.notifyObservers(activePlayer);
+						this.notifyObservers(this);// only useful for AI
 						updateMove(activePlayer, orig, dest);
 						return true;
 					}
@@ -363,6 +381,7 @@ public class Game extends CommandInterface {
 		move.setDest(dest);
 		move.setOrig(orig);
 		this.notifyObservers(move);
+		this.notifyObservers(this);// only useful for AI
 
 	}
 
@@ -377,6 +396,7 @@ public class Game extends CommandInterface {
 		else
 			unitMultiplier += 5;
 		this.notifyObservers(unitMultiplier);
+		this.notifyObservers(this);// only useful for AI
 	}
 
 	/**
@@ -425,6 +445,8 @@ public class Game extends CommandInterface {
 	public boolean setMap(Map map) {
 		try {
 			this.map = map;
+			this.notifyObservers(this.map);
+			this.notifyObservers(this);// only useful for AI
 			return true;
 		} catch (Exception e) {
 			System.err.print(e.getMessage());
@@ -450,6 +472,7 @@ public class Game extends CommandInterface {
 	public boolean setMove(Move move) {
 		try {
 			this.move = move;
+			this.notifyObservers(move);
 			return true;
 
 		} catch (Exception e) {
@@ -478,6 +501,8 @@ public class Game extends CommandInterface {
 	public boolean setPlayers(LinkedList<Player> players) {
 		try {
 			this.players = players;
+			this.notifyObservers(players);
+			this.notifyObservers(this);// only useful for AI
 			return true;
 		} catch (Exception e) {
 			System.err.print(e.getMessage());
@@ -527,6 +552,8 @@ public class Game extends CommandInterface {
 	public boolean resetUnitMultiplier() {
 		try {
 			this.unitMultiplier = 4;
+			this.notifyObservers(unitMultiplier);
+			this.notifyObservers(this);// only useful for AI
 			return true;
 		} catch (Exception e) {
 			System.err.print(e.getMessage());
@@ -552,6 +579,8 @@ public class Game extends CommandInterface {
 	public boolean setActivePlayer(Player activePlayer) {
 		try {
 			this.activePlayer = activePlayer;
+			this.notifyObservers(activePlayer);
+			this.notifyObservers(this);// only useful for AI
 			return true;
 		} catch (Exception e) {
 			System.err.print(e.getMessage());
@@ -582,6 +611,20 @@ public class Game extends CommandInterface {
 			System.err.print(e.getMessage());
 			return false;
 		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.util.Observer#update(java.util.Observable, java.lang.Object)
+	 * 
+	 * @author Chris Ray Created on 1:35:19 PM Dec 4, 2011
+	 */
+	@Override
+	public void update(Observable o, Object arg) {
+		// Player AI stuff
+		if ((o instanceof PlayerAI) && (arg instanceof Map))
+			this.map = (Map) arg;
 	}
 
 }
