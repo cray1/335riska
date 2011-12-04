@@ -18,6 +18,13 @@ public class Territory {
 	private Team owningTeam;
 	private int UnitsOnTerritory;
 	private Player owningPlayer;
+	/**
+	 * This is for the AI, ignore this otherwise
+	 * 
+	 * @author Chris Ray Created on 2:11:03 PM Dec 04, 2011
+	 * 
+	 */
+	private int placementPriority;
 
 	/**
 	 * @param name
@@ -33,6 +40,7 @@ public class Territory {
 		this.parentContinent = parentContinent;
 		this.setOwningTeam(null);
 		this.setUnitsOnTerritory(0);
+		this.setPlacementPriority(0);
 		owningPlayer = new Player(null);
 	}
 
@@ -165,6 +173,27 @@ public class Territory {
 	 */
 	public void setOwningPlayer(Player p) {
 		this.owningPlayer = p;
+	}
+
+	/**
+	 * This is for the AI, ignore otherwise
+	 * 
+	 * @return the placementPriority
+	 * @author Chris Ray Created on 2:12:41 PM Dec 4, 2011
+	 */
+	public int getPlacementPriority() {
+		return placementPriority;
+	}
+
+	/**
+	 * This is for the AI, ignore otherwise
+	 * 
+	 * @param placementPriority
+	 *            the placementPriority to set
+	 * @author Chris Ray Created on 2:12:41 PM Dec 4, 2011
+	 */
+	public void setPlacementPriority(int placementPriority) {
+		this.placementPriority = placementPriority;
 	}
 
 }

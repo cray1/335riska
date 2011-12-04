@@ -6,6 +6,7 @@
 package baseModel;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Observable;
 
 /**
@@ -90,6 +91,44 @@ public class Player extends Observable {
 	 */
 	public ArrayList<Territory> getTerritoriesOwned() {
 		return territoriesOwned;
+	}
+
+	/**
+	 * @return the continentsOwned
+	 * @author Chris Ray Created on 2:38:09 PM Dec 4, 2011
+	 */
+	public ArrayList<Continent> getContinentsOwned() {
+
+		// temporary Map to use for this purpose only
+		HashMap<String, Continent> continentsPossible = new Map().getMap();
+		ArrayList<Continent> continentsOwned = new ArrayList<Continent>();
+		continentsOwned.add(continentsPossible.get("North America"));
+		continentsOwned.add(continentsPossible.get("South America"));
+		continentsOwned.add(continentsPossible.get("Africa"));
+		continentsOwned.add(continentsPossible.get("Australia"));
+		continentsOwned.add(continentsPossible.get("Europe"));
+		continentsOwned.add(continentsPossible.get("Asia"));
+
+		for (Territory ter : this.getTerritoriesOwned())
+			if (!continentsPossible.get("North America").getChildren()
+					.contains(ter))
+				continentsOwned.remove(continentsPossible.get("North America"));
+			else if (!continentsPossible.get("South America").getChildren()
+					.contains(ter))
+				continentsOwned.remove(continentsPossible.get("South America"));
+			else if (!continentsPossible.get("Africa").getChildren()
+					.contains(ter))
+				continentsOwned.remove(continentsPossible.get("Africa"));
+			else if (!continentsPossible.get("Australia").getChildren()
+					.contains(ter))
+				continentsOwned.remove(continentsPossible.get("Australia"));
+			else if (!continentsPossible.get("Europe").getChildren()
+					.contains(ter))
+				continentsOwned.remove(continentsPossible.get("Europe"));
+			else if (!continentsPossible.get("Asia").getChildren()
+					.contains(ter))
+				continentsOwned.remove(continentsPossible.get("Asia"));
+		return continentsOwned;
 	}
 
 }
