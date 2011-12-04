@@ -10,11 +10,7 @@ import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-
-import server.RiskiClient;
-import server.RiskiServer;
 
 /**
  * @author AJ Venne Created on 12:35:37 AM Nov 27, 2011
@@ -46,9 +42,7 @@ public class TitleView extends MasterViewPanel {
 		this.add(new JLabel(new ImageIcon("images/title.png")));
 	}
 
-	/*
-	 * Add the JButtons for exiting and starting a new game.
-	 */
+	
 	private void setUpButtons() {
 		
 		JPanel buttonPanel = new JPanel();
@@ -74,20 +68,7 @@ public class TitleView extends MasterViewPanel {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			String port = JOptionPane.showInputDialog(
-					"Enter the port you want to listen on:", null);
-			
-			m.server = new RiskiServer(port);
-			String name = JOptionPane.showInputDialog(
-					"Enter Your name:", null);
-			try{
-				m.client = new RiskiClient(name, "127.0.0.1", Integer.parseInt(port));
-				
-			}catch (Exception e){
-				m.client = new RiskiClient(name, "127.0.0.1", 4000);
-			}
 			m.changeView(Views.MAP, null);
-			
 		}
 
 	}
@@ -95,9 +76,6 @@ public class TitleView extends MasterViewPanel {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			m.client = new RiskiClient(JOptionPane.showInputDialog("Please enter your name."), JOptionPane
-					.showInputDialog("Please enter the ip address you'd like to connect to."), Integer.parseInt(JOptionPane
-							.showInputDialog("Please enter the port to use.")));
 			m.changeView(Views.JOIN, null);
 		}
 

@@ -2,9 +2,6 @@ package gui;
 
 import javax.swing.JPanel;
 
-
-
-
 /**
  * A KeyEventedPanel is a JPanel that can be placed inside of any JFrame or
  * other JPanel. It also implements the KeyListener interface so that keyboard
@@ -19,7 +16,6 @@ import javax.swing.JPanel;
 public abstract class MasterViewPanel extends JPanel {
 
 	protected MasterView m;
-
 
 	/**
 	 * Creates a new KeyEventedPanel with a reference to the MasterView.

@@ -8,8 +8,6 @@ import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -25,7 +23,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-import javax.swing.JTextField;
 
 
 import javax.swing.JLabel;
@@ -33,19 +30,23 @@ import javax.swing.JLabel;
 import baseModel.Continent;
 import baseModel.Game;
 import baseModel.Map;
+import baseModel.Player;
 import baseModel.Team;
 import baseModel.Territory;
 
 
-
+/**
+ * MapView - the view of the map, includes a user bar, the map, and a chat area
+ * @author Aj Venne
+ */
+@SuppressWarnings("serial")
 public class MapView extends MasterViewPanel implements Observer{
 	BufferedImage buffImage;
 	Game newGame;
 	Map gameMap;
 	JPanel mapBox = new JPanel();
 	HashMap<String, Continent> continents;
-	JTextArea chatArea ;
-	JTextField typeArea ;
+	
 	HashMap<String, Territory> territories;
 	Image mapImage;
 	public MapView(MasterView m) {
@@ -54,6 +55,7 @@ public class MapView extends MasterViewPanel implements Observer{
 		setUpGame();
 		
 	}
+	
 	private void setUpGUI(){
 		this.setVisible(true);
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -67,7 +69,7 @@ public class MapView extends MasterViewPanel implements Observer{
 		
 		Graphics g = buffImage.getGraphics();
 	    g.drawImage(mapImage, 0, 0, mapBox);
-//	    
+	    
 //	   this.add(new JLabel(new ImageIcon(buffImage)));
 	   mapBox.add(new JLabel(new ImageIcon(buffImage)));
 	   mapBox.add(new JLabel(new ImageIcon("images/map2.png")));
@@ -119,7 +121,6 @@ public class MapView extends MasterViewPanel implements Observer{
 		attackBox.add(move);
 		attackBox.add(endTurn);
 		attackBox.add(new JLabel(""));
-		
 		userBar.add(attackBox);
 		
 //		//Cards
@@ -134,30 +135,30 @@ public class MapView extends MasterViewPanel implements Observer{
 		userBar.add(new JLabel(new ImageIcon("images/cavalryCard.jpg")));
 		userBar.add(new JLabel(new ImageIcon("images/cavalryCard.jpg")));
 		userBar.add(new JLabel(new ImageIcon("images/cavalryCard.jpg")));
-
 		
 		//Chat area
 		JPanel textArea = new JPanel();
 		textArea.setLayout(new BoxLayout(textArea, BoxLayout.Y_AXIS));
-		chatArea = new JTextArea(2, 15);
-		typeArea = new JTextField();
 
+		JTextArea chatArea = new JTextArea(2, 15);
+		JTextArea typeArea = new JTextArea(1, 10);
 		
 		chatArea.setLineWrap(true);
 		chatArea.setEditable(false);
-		typeArea.addActionListener(new retListener());
+		
 		JScrollPane scrollPane = new JScrollPane(chatArea);
 		scrollPane.setPreferredSize(new Dimension(150, 200));
 		textArea.add(scrollPane);
-		textArea.add(typeArea);
-		userBar.add(textArea);
-		//experiment
 		
+		textArea.add(typeArea, BorderLayout.SOUTH);
+		
+		
+		userBar.add(textArea);
 		
 		
 		chatArea.setText("Welcome to Risk!\nUse the buttons to the left to make your move!\nHover over any territory to view it's name!\n"+
-						"Enter text below to talk to your fellow players, this is your chat box! \n");
-		m.client.addObserver(this);
+						"Enter text below to talk to your fellow players, this is your chat box!");
+		
 	}
 	
 	private void setUpGame(){
@@ -167,15 +168,19 @@ public class MapView extends MasterViewPanel implements Observer{
 		territories = gameMap.getMapAsStringTerritoryHashMap();
 		
 	}
-	
+	/**
+	 * Called on repaint, used to update territory labels, etc.
+	 * @author Aj Venne
+	 */
 	public void paintComponent(Graphics g){
 			
 		//TO DO: Working on making these flags appear over/on every owned territory on repaint, gonna make them small to fit new map better.
 		territories.get("Alaska").setOwningTeam(Team.GREEN);
 		if(territories.get("Alaska").getOwningTeam() != null){
-//			
+			
 //			char[] name = territories.get("Alaska").getOwner().toString().toCharArray();
 //			g.drawChars(name, 0, 5, 317, 178);
+			
 			mapBox.add(new JLabel(territories.get("Alaska").getOwningTeam().toString()));
 		}
 			
@@ -194,6 +199,7 @@ public class MapView extends MasterViewPanel implements Observer{
 		}
 		
 	}
+	
 	private class mouse implements MouseListener{
 
 		@Override
@@ -253,7 +259,13 @@ public class MapView extends MasterViewPanel implements Observer{
 		}
 		
 	}
-	//Helper method mentioned above for determining location
+	/**
+	 * Used in conjunction with the mouselistener, used to determine territory
+	 * @param x - x value of current/desired point
+	 * @param y - y value of current/desired point
+	 * @return the name of the territory as a String
+	 * @author Aj Venne
+	 */
 	private String getLocation(int x, int y){
 		
 		//NORTH AMERICA
@@ -441,26 +453,13 @@ public class MapView extends MasterViewPanel implements Observer{
 		return "";
 		
 	}
-	private class retListener implements ActionListener{
-
-		@Override
-		public void actionPerformed(ActionEvent arg0) {
-			
-				m.client.writeObject(typeArea.getText());
-				typeArea.setText("");
-				typeArea.grabFocus();
-			
-			
-		}
-		
-	}
+	/**
+	 * 
+	 * @author Aj Venne
+	 */
 	@Override
 	public void update(Observable arg0, Object arg1) {
-		if (arg1 instanceof String){
-			chatArea.append((String) arg1);
-			chatArea.setCaretPosition(chatArea.getDocument().getLength());
-		}
-			
+		// TODO Auto-generated method stub
 		
 	}
 	
