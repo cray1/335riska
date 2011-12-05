@@ -16,8 +16,11 @@ import java.util.Observer;
 public class PlayerAI extends Player implements Observer {
 	private Game game;
 	private boolean turnOver;
+	/**
+	 * @author Chris Ray Created on 2:31:24 AM Dec 5, 2011
+	 * 
+	 */
 	public boolean initialUnitsPlaced;
-	private boolean allContinentsHaveBeenClaimed;
 
 	/**
 	 * @param t
@@ -27,7 +30,7 @@ public class PlayerAI extends Player implements Observer {
 	public PlayerAI(Team t) {
 		super(t);
 		turnOver = true;
-		game = null;
+		game = new Game();
 		initialUnitsPlaced = false;
 		// TODO Auto-generated constructor stub
 
@@ -43,7 +46,6 @@ public class PlayerAI extends Player implements Observer {
 	public void startTurn() {
 		turnOver = false;
 		this.notifyObservers(this.turnOver);
-		game.setActivePlayer(this);
 		game.awardBeginningUnits();
 		placeInitialUnits();
 		chooseCardsTurnIn();
@@ -239,87 +241,96 @@ public class PlayerAI extends Player implements Observer {
 				// limit the amount of units to be placed in a particular
 				// priority level
 				int unitAmountLimiter = 10;
-				while (unitAmountLimiter >= 0)
+				while (unitAmountLimiter >= 0) {
 
 					// break if no more units to add or no territories in the
 					// sorted array list
 					if ((this.getNewUnits() == 0) || (sorted3.size() <= 0))
 						break;
 
-				// place one unit at a time in each territory in the sorted
-				// sublist
-				for (Territory ter : sorted3)
-					if (this.getNewUnits() >= 1) {
-						ter.addUnits(1, this.getTeam());
-						this.setNewUnits(this.getNewUnits() - 1);
-						unitAmountLimiter--;
-					} else
-						break;
-
+					// place one unit at a time in each territory in the sorted
+					// sublist
+					for (Territory ter : sorted3)
+						if (this.getNewUnits() >= 1) {
+							ter.addUnits(1, this.getTeam());
+							this.setNewUnits(this.getNewUnits() - 1);
+							unitAmountLimiter--;
+						} else
+							break;
+				}
 				// limit the amount of units to be placed in a particular
 				// priority level
 				unitAmountLimiter = 10;
-				while (unitAmountLimiter >= 0)
+				while (unitAmountLimiter >= 0) {
 
 					// break if no more units to add or no territories in the
 					// sorted array list
 					if ((this.getNewUnits() == 0) || (sorted2.size() <= 0))
 						break;
 
-				// place one unit at a time in each territory in the sorted
-				// sublist
-				for (Territory ter : sorted2)
-					if (this.getNewUnits() >= 1) {
-						ter.addUnits(1, this.getTeam());
-						this.setNewUnits(this.getNewUnits() - 1);
-						unitAmountLimiter--;
-					} else
-						break;
-
+					// place one unit at a time in each territory in the sorted
+					// sublist
+					for (Territory ter : sorted2)
+						if (this.getNewUnits() >= 1) {
+							ter.addUnits(1, this.getTeam());
+							this.setNewUnits(this.getNewUnits() - 1);
+							unitAmountLimiter--;
+						} else
+							break;
+				}
 				// limit the amount of units to be placed in a particular
 				// priority level
 				unitAmountLimiter = 10;
-				while (unitAmountLimiter >= 0)
+				while (unitAmountLimiter >= 0) {
 
 					// break if no more units to add or no territories in the
 					// sorted array list
 					if ((this.getNewUnits() == 0) || (sorted1.size() <= 0))
 						break;
 
-				// place one unit at a time in each territory in the sorted
-				// sublist
-				for (Territory ter : sorted1)
-					if (this.getNewUnits() >= 1) {
-						ter.addUnits(1, this.getTeam());
-						this.setNewUnits(this.getNewUnits() - 1);
-						unitAmountLimiter--;
-					} else
-						break;
-
+					// place one unit at a time in each territory in the sorted
+					// sublist
+					for (Territory ter : sorted1)
+						if (this.getNewUnits() >= 1) {
+							ter.addUnits(1, this.getTeam());
+							this.setNewUnits(this.getNewUnits() - 1);
+							unitAmountLimiter--;
+						} else
+							break;
+				}
 				// limit the amount of units to be placed in a particular
 				// priority level
 				unitAmountLimiter = 10;
-				while (unitAmountLimiter >= 0)
+				while (unitAmountLimiter >= 0) {
 
 					// break if no more units to add or no territories in the
 					// sorted array list
 					if ((this.getNewUnits() == 0) || (sorted0.size() <= 0))
 						break;
 
-				// place one unit at a time in each territory in the sorted
-				// sublist
-				for (Territory ter : sorted0)
-					if (this.getNewUnits() >= 1) {
-						ter.addUnits(1, this.getTeam());
-						this.setNewUnits(this.getNewUnits() - 1);
-						unitAmountLimiter--;
-					} else
-						break;
-
+					// place one unit at a time in each territory in the sorted
+					// sublist
+					for (Territory ter : sorted0)
+						if (this.getNewUnits() >= 1) {
+							ter.addUnits(1, this.getTeam());
+							this.setNewUnits(this.getNewUnits() - 1);
+							unitAmountLimiter--;
+						} else
+							break;
+				}
 			}
 			// once done placing units set all priority to 0
 
 		}
+	}
+
+	/**
+	 * @param game
+	 *            the game to set
+	 * @author Chris Ray Created on 2:29:16 AM Dec 5, 2011
+	 */
+	public void setGame(Game game) {
+		this.game = game;
 	}
 
 	/**

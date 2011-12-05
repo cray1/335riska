@@ -40,22 +40,12 @@ public class Game extends CommandInterface implements Observer {
 
 		if (checkSetUp()) {
 			activePlayer = players.getFirst();
-			// check if any players are AI, if so add them as observers
-			for (Player p : players)
-				if (p instanceof PlayerAI)
-					this.addObserver((PlayerAI) p);
-			EventQueue.invokeLater(new Runnable() {
-				@Override
-				public void run() {
-					try {
-						while (!killAI)
-							if (activePlayer instanceof PlayerAI)
-								((PlayerAI) activePlayer).startTurn();
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
+			while (!killAI)
+				if (activePlayer instanceof PlayerAI) {
+					this.notifyObservers(this);
+					((PlayerAI) activePlayer).setGame(this);
+					((PlayerAI) activePlayer).startTurn();
 				}
-			});
 			return true;
 
 		} else
@@ -92,8 +82,13 @@ public class Game extends CommandInterface implements Observer {
 		// activeItr = players.iterator();
 		// defend Dice
 		defendDice = new ArrayList<Die>();
+		defendDice.add(new Die());
+		defendDice.add(new Die());
 		// attack Dice
 		attackDice = new ArrayList<Die>();
+		attackDice.add(new Die());
+		attackDice.add(new Die());
+		attackDice.add(new Die());
 		// setActivePlayer(activeItr.next()); // placeholder
 
 	}
