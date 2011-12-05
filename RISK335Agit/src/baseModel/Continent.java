@@ -16,7 +16,6 @@ public class Continent {
 	private final ArrayList<Territory> children;
 	private final int bonusUnitsIfOwned;
 	private Team owner;
-	private boolean isClaimed;
 
 	/**
 	 * @param name
@@ -31,7 +30,6 @@ public class Continent {
 		this.children = children;
 		this.bonusUnitsIfOwned = bonusUnitsIfOwned;
 		this.setOwner(null);
-		setClaimed(false);
 
 	}
 
@@ -90,19 +88,15 @@ public class Continent {
 	}
 
 	/**
-	 * @return the isClaimed
+	 * @return true if there is at least one territory on this continent with a
+	 *         non null team
 	 * @author Chris Ray Created on 5:21:35 PM Dec 4, 2011
 	 */
 	public boolean isClaimed() {
-		return isClaimed;
+		for (Territory ter : children)
+			if (ter.getOwningTeam() != null)
+				return true;
+		return false;
 	}
 
-	/**
-	 * @param isClaimed
-	 *            the isClaimed to set
-	 * @author Chris Ray Created on 5:21:35 PM Dec 4, 2011
-	 */
-	public void setClaimed(boolean isClaimed) {
-		this.isClaimed = isClaimed;
-	}
 }
