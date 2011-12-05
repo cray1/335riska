@@ -201,10 +201,10 @@ public class MapView extends MasterViewPanel implements Observer{
 	private void makeMove(Territory orig, Territory dest, int num){
 		
 		if(game.move(orig, dest, num)){
-			System.out.println("Move made!");
+			chatArea.setText(chatArea.getText() + "Move successful!\n");
 		}
 		else
-			System.out.println("Illegal move!");
+			chatArea.setText(chatArea.getText() + "Move failed!\n");
 		
 	}
 	private class mouse implements MouseListener{
