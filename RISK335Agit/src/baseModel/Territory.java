@@ -24,7 +24,7 @@ public class Territory {
 	 * @author Chris Ray Created on 2:11:03 PM Dec 04, 2011
 	 * 
 	 */
-	private int placementPriority;
+	private int priority;
 
 	/**
 	 * @param name
@@ -40,7 +40,7 @@ public class Territory {
 		this.parentContinent = parentContinent;
 		this.setOwningTeam(null);
 		this.setUnitsOnTerritory(0);
-		this.setPlacementPriority(0);
+		this.setPriority(0);
 		owningPlayer = new Player(null);
 	}
 
@@ -178,22 +178,22 @@ public class Territory {
 	/**
 	 * This is for the AI, ignore otherwise
 	 * 
-	 * @return the placementPriority
+	 * @return the priority
 	 * @author Chris Ray Created on 2:12:41 PM Dec 4, 2011
 	 */
-	public int getPlacementPriority() {
-		return placementPriority;
+	public int getPriority() {
+		return priority;
 	}
 
 	/**
 	 * This is for the AI, ignore otherwise
 	 * 
-	 * @param placementPriority
-	 *            the placementPriority to set
+	 * @param priority
+	 *            the priority to set
 	 * @author Chris Ray Created on 2:12:41 PM Dec 4, 2011
 	 */
-	public void setPlacementPriority(int placementPriority) {
-		this.placementPriority = placementPriority;
+	public void setPriority(int priority) {
+		this.priority = priority;
 	}
 
 }

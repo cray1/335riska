@@ -99,4 +99,16 @@ public class Continent {
 		return false;
 	}
 
+	/**
+	 * @author Chris Ray Created on 5:36:45 PM Dec 4, 2011
+	 * @param team
+	 * @return true if there is an enemy in this continent
+	 * 
+	 */
+	public boolean hasEnemy(Team team) {
+		for (Territory ter : children)
+			if (ter.getOwningTeam() != team)
+				return true;
+		return false;
+	}
 }
