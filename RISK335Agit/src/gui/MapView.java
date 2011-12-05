@@ -25,6 +25,7 @@ import javax.imageio.ImageIO;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -56,11 +57,13 @@ public class MapView extends MasterViewPanel implements Observer{
 	JTextArea chatArea;
     JTextField typeArea;
 	HashMap<String, Territory> territories;
+	LinkedList<Territory> moveTerritories = new LinkedList<Territory>();
 	
 	public MapView(MasterView m) {
 		super(m);
-		setUpGUI();
 		setUpGame();
+		setUpGUI();
+		
 		
 	}
 	
@@ -90,7 +93,7 @@ public class MapView extends MasterViewPanel implements Observer{
 		userBar.setPreferredSize(new Dimension(mapImage.getWidth(null) -50, 200));
 		
 		this.add(userBar);
-		JLabel turn = new JLabel("\tIt is "+ "" +"\'s turn");
+		JLabel turn = new JLabel("\tIt is "+ game.getActivePlayer().getTeam() +"\'s turn, " + game.getCurrentPhase() + "phase.");
 		JButton surrender = new JButton("Surrender");
 		
 		JButton turnInCards = new JButton("Turn in Cards");
@@ -162,6 +165,7 @@ public class MapView extends MasterViewPanel implements Observer{
 	
 	private void setUpGame(){
 		game = new Game();
+		game.setActivePlayer(new Player(Team.GREEN));
 		gameMap = game.getMap();
 		continents = gameMap.getMap();
 		territories = gameMap.getMapAsStringTerritoryHashMap();
@@ -182,25 +186,25 @@ public class MapView extends MasterViewPanel implements Observer{
 		territories.get("Alaska").setOwningTeam(Team.GREEN);
 	}
 
-	LinkedList<Territory> ter = new LinkedList<Territory>();
+	
+	
 	private class moveButtonListener implements ActionListener{
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-//			System.out.print("To be implemented...");
-//			JOptionPane.showMessageDialog(null, "Choose your move!");
-						
-			chatArea.setText(chatArea.getText() + "\nMoving from ");
+
+			chatArea.setText(chatArea.getText() + "\nAttempting to move from ");
 			addMouseListener(new moveListener());
 		}
 		
 	}
-	private void makeMove(Territory orig, Territory dest){
-		Move newMove = new Move();
+	private void makeMove(Territory orig, Territory dest, int num){
 		
-		newMove.setOrig(orig);
-		newMove.setDest(dest);
-		System.out.println("Move made!");
+		if(game.move(orig, dest, num)){
+			System.out.println("Move made!");
+		}
+		else
+			System.out.println("Illegal move!");
 		
 	}
 	private class mouse implements MouseListener{
@@ -247,16 +251,33 @@ public class MapView extends MasterViewPanel implements Observer{
 		@Override
 		public void mouseClicked(MouseEvent e) {
 			if(e.getX() < mapImage.getWidth() && e.getY() < mapImage.getHeight()){
+
+			if(territories.get(getLocation(e.getX(), e.getY())).toString().equals("")){
+				return;
+			}
 			
-			ter.add(territories.get(getLocation(e.getX(), e.getY())));
-			if(ter.size() == 1){
+			moveTerritories.add(territories.get(getLocation(e.getX(), e.getY())));
+			if(moveTerritories.size() == 1){
 				chatArea.setText(chatArea.getText() + territories.get(getLocation(e.getX(), e.getY()).toString()) + " to ");
 			}
 //			territories.get(getLocation(e.getX(), e.getY())).toString();
-			if(ter.size() == 2){
-				makeMove(ter.pop(), ter.pop());
+			if(moveTerritories.size() == 2){
+				
 				removeMouseListener(this);
-				chatArea.setText(chatArea.getText() + territories.get(getLocation(e.getX(), e.getY()).toString()));
+				chatArea.setText(chatArea.getText() + territories.get(getLocation(e.getX(), e.getY()).toString()) + "\n");
+				
+				String units = JOptionPane.showInputDialog(null, "How many units would you like to move?");
+				int unitInt = 0;
+				try {
+					unitInt = Integer.parseInt(units);
+				} catch (NumberFormatException e1) {
+					units = JOptionPane.showInputDialog(null, "Not a valid input, please enter a number.");
+					unitInt = Integer.parseInt(units);
+					
+				}
+				makeMove(moveTerritories.pop(), moveTerritories.pop(), unitInt);
+				
+					
 			}
 //			System.out.println(ter.toString());
 			}
