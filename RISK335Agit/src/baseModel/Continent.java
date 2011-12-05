@@ -16,6 +16,7 @@ public class Continent {
 	private final ArrayList<Territory> children;
 	private final int bonusUnitsIfOwned;
 	private Team owner;
+	private boolean isClaimed;
 
 	/**
 	 * @param name
@@ -30,6 +31,7 @@ public class Continent {
 		this.children = children;
 		this.bonusUnitsIfOwned = bonusUnitsIfOwned;
 		this.setOwner(null);
+		setClaimed(false);
 
 	}
 
@@ -85,5 +87,22 @@ public class Continent {
 	 */
 	public void setOwner(Team owner) {
 		this.owner = owner;
+	}
+
+	/**
+	 * @return the isClaimed
+	 * @author Chris Ray Created on 5:21:35 PM Dec 4, 2011
+	 */
+	public boolean isClaimed() {
+		return isClaimed;
+	}
+
+	/**
+	 * @param isClaimed
+	 *            the isClaimed to set
+	 * @author Chris Ray Created on 5:21:35 PM Dec 4, 2011
+	 */
+	public void setClaimed(boolean isClaimed) {
+		this.isClaimed = isClaimed;
 	}
 }
