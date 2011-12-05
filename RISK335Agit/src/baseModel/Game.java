@@ -26,13 +26,6 @@ public class Game extends CommandInterface implements Observer {
 	private ArrayList<Die> defendDice;
 	private ArrayList<Die> attackDice;
 	private Player activePlayer;
-	private Iterator<Player> activeItr;
-	private List<String> turnPhase;
-	private String currentPhase = "";
-
-	private String newPh = "New Units Phase";
-	private String attackPh = "Attack Phase";
-	private String movePh = "Move Phase";
 
 	/**
 	 * @author Chris Ray Created on 8:57:30 AM Dec 2, 2011
@@ -464,25 +457,6 @@ public class Game extends CommandInterface implements Observer {
 	}
 
 	/**
-	 * @param move
-	 *            the move to set
-	 * @author Chris Ray Created on 9:07:24 PM Nov 29, 2011
-	 */
-	@Override
-	public boolean setMove(Move move) {
-		try {
-			this.move = move;
-			this.notifyObservers(move);
-			return true;
-
-		} catch (Exception e) {
-			System.err.print(e.getMessage());
-			return false;
-
-		}
-	}
-
-	/**
 	 * @return the players
 	 * @author Chris Ray Created on 9:23:49 PM Nov 29, 2011
 	 */
@@ -581,31 +555,6 @@ public class Game extends CommandInterface implements Observer {
 			this.activePlayer = activePlayer;
 			this.notifyObservers(activePlayer);
 			this.notifyObservers(this);// only useful for AI
-			return true;
-		} catch (Exception e) {
-			System.err.print(e.getMessage());
-			return false;
-		}
-	}
-
-	/**
-	 * @return the currentPhase
-	 * @author Chris Ray Created on 8:52:07 AM Dec 2, 2011
-	 */
-	@Override
-	public String getCurrentPhase() {
-		return currentPhase;
-	}
-
-	/**
-	 * @param currentPhase
-	 *            the currentPhase to set
-	 * @author Chris Ray Created on 8:52:07 AM Dec 2, 2011
-	 */
-	@Override
-	public boolean setCurrentPhase(String currentPhase) {
-		try {
-			this.currentPhase = currentPhase;
 			return true;
 		} catch (Exception e) {
 			System.err.print(e.getMessage());
