@@ -16,6 +16,7 @@ import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Observable;
@@ -58,7 +59,7 @@ public class MapView extends MasterViewPanel implements Observer{
     JTextField typeArea;
 	HashMap<String, Territory> territories;
 	LinkedList<Territory> moveTerritories = new LinkedList<Territory>();
-	
+	ArrayList<Territory> territoryArrayList;
 	public MapView(MasterView m) {
 		super(m);
 		setUpGame();
@@ -80,7 +81,7 @@ public class MapView extends MasterViewPanel implements Observer{
 		
 		add(mapBox);
 		
-//		this.addMouseListener(new mouse());
+		this.addMouseListener(new mouse());
 		//Adds motion listener for tooltip text
 		this.addMouseMotionListener(new mouseMove());
 		setUpUserBar();	
@@ -169,7 +170,7 @@ public class MapView extends MasterViewPanel implements Observer{
 		gameMap = game.getMap();
 		continents = gameMap.getMap();
 		territories = gameMap.getMapAsStringTerritoryHashMap();
-		
+		territoryArrayList = gameMap.getTerritories();
 	}
 	/**
 	 * Called on repaint, used to update territory labels, etc.
@@ -180,13 +181,351 @@ public class MapView extends MasterViewPanel implements Observer{
 		super.paintComponents(g);
 		g.drawImage(mapImage, 0, 0, this);
 		
-//		g.fillOval(100, 100, 100, 100);
-//		g.drawImage( new ImageIcon("images/blackflag.png").getImage(),172,154, null);
 //		TO DO: Working on making these flags appear over/on every owned territory on repaint, gonna make them small to fit new map better.
-		territories.get("Alaska").setOwningTeam(Team.GREEN);
+		territories.get("Alaska").setOwningTeam(Team.RED);
+		
+		for(int i = 0; i < territoryArrayList.size(); i++){
+			
+			//North America
+			if(territoryArrayList.get(i).toString().equals("Alaska")){
+				if(territoryArrayList.get(i).getOwningTeam() == null){
+					g.drawImage(getFlag(""), 63, 32, this);
+				}
+				else
+					g.drawImage(getFlag(territoryArrayList.get(i).getOwningTeam().toString()), 63, 32, this);
+			}
+			if(territoryArrayList.get(i).toString().equals("Northwest Territory")){
+				if(territoryArrayList.get(i).getOwningTeam() == null){
+					g.drawImage(getFlag(""), 147, 33, this);
+				}
+				else
+					g.drawImage(getFlag(territoryArrayList.get(i).getOwningTeam().toString()), 147, 33, this);
+			}
+			if(territoryArrayList.get(i).toString().equals("Greenland")){
+				if(territoryArrayList.get(i).getOwningTeam() == null){
+					g.drawImage(getFlag(""), 354, 3, this);
+				}
+				else
+					g.drawImage(getFlag(territoryArrayList.get(i).getOwningTeam().toString()), 354, 3, this);
+			}
+			if(territoryArrayList.get(i).toString().equals("Alberta")){
+				if(territoryArrayList.get(i).getOwningTeam() == null){
+					g.drawImage(getFlag(""), 111, 74, this);
+				}
+				else
+					g.drawImage(getFlag(territoryArrayList.get(i).getOwningTeam().toString()), 111, 74, this);
+			}
+			if(territoryArrayList.get(i).toString().equals("Ontario")){
+				if(territoryArrayList.get(i).getOwningTeam() == null){
+					g.drawImage(getFlag(""), 179, 77, this);
+				}
+				else
+					g.drawImage(getFlag(territoryArrayList.get(i).getOwningTeam().toString()), 179, 77, this);
+			}
+			if(territoryArrayList.get(i).toString().equals("Quebec")){
+				if(territoryArrayList.get(i).getOwningTeam() == null){
+					g.drawImage(getFlag(""), 237, 74, this);
+				}
+				else
+					g.drawImage(getFlag(territoryArrayList.get(i).getOwningTeam().toString()), 237, 74, this);
+			}
+			
+			if(territoryArrayList.get(i).toString().equals("Western United States")){
+				if(territoryArrayList.get(i).getOwningTeam() == null){
+					g.drawImage(getFlag(""), 101, 132, this);
+				}
+				else
+					g.drawImage(getFlag(territoryArrayList.get(i).getOwningTeam().toString()), 101, 132, this);
+			}
+			if(territoryArrayList.get(i).toString().equals("Eastern United States")){
+				if(territoryArrayList.get(i).getOwningTeam() == null){
+					g.drawImage(getFlag(""), 163, 126, this);
+				}
+				else
+					g.drawImage(getFlag(territoryArrayList.get(i).getOwningTeam().toString()), 163, 126, this);
+			}
+			if(territoryArrayList.get(i).toString().equals("Central America")){
+				if(territoryArrayList.get(i).getOwningTeam() == null){
+					g.drawImage(getFlag(""), 105, 191, this);
+				}
+				else
+					g.drawImage(getFlag(territoryArrayList.get(i).getOwningTeam().toString()), 105, 191, this);
+			}
+			
+			//South America
+			if(territoryArrayList.get(i).toString().equals("Venezuela")){
+				if(territoryArrayList.get(i).getOwningTeam() == null){
+					g.drawImage(getFlag(""), 201, 253, this);
+				}
+				else
+					g.drawImage(getFlag(territoryArrayList.get(i).getOwningTeam().toString()), 201, 253, this);
+			}
+			
+			if(territoryArrayList.get(i).toString().equals("Peru")){
+				if(territoryArrayList.get(i).getOwningTeam() == null){
+					g.drawImage(getFlag(""), 189, 296, this);
+				}
+				else
+					g.drawImage(getFlag(territoryArrayList.get(i).getOwningTeam().toString()), 189, 296, this);
+			}
+			if(territoryArrayList.get(i).toString().equals("Brazil")){
+				if(territoryArrayList.get(i).getOwningTeam() == null){
+					g.drawImage(getFlag(""), 270, 307, this);
+				}
+				else
+					g.drawImage(getFlag(territoryArrayList.get(i).getOwningTeam().toString()), 270, 307, this);
+			}
+			if(territoryArrayList.get(i).toString().equals("Argentina")){
+				if(territoryArrayList.get(i).getOwningTeam() == null){
+					g.drawImage(getFlag(""), 230, 401, this);
+				}
+				else
+					g.drawImage(getFlag(territoryArrayList.get(i).getOwningTeam().toString()), 230, 401, this);
+			}
+			
+			//Africa
+			if(territoryArrayList.get(i).toString().equals("North Africa")){
+				if(territoryArrayList.get(i).getOwningTeam() == null){
+					g.drawImage(getFlag(""), 436,208, this);
+				}
+				else
+					g.drawImage(getFlag(territoryArrayList.get(i).getOwningTeam().toString()), 436,208, this);
+			}
+			if(territoryArrayList.get(i).toString().equals("Egypt")){
+				if(territoryArrayList.get(i).getOwningTeam() == null){
+					g.drawImage(getFlag(""), 515 ,179, this);
+				}
+				else
+					g.drawImage(getFlag(territoryArrayList.get(i).getOwningTeam().toString()), 515,179, this);
+			}
+			if(territoryArrayList.get(i).toString().equals("East Africa")){
+				if(territoryArrayList.get(i).getOwningTeam() == null){
+					g.drawImage(getFlag(""), 544,219, this);
+				}
+				else
+					g.drawImage(getFlag(territoryArrayList.get(i).getOwningTeam().toString()), 544,219, this);
+			}
+			if(territoryArrayList.get(i).toString().equals("Congo")){
+				if(territoryArrayList.get(i).getOwningTeam() == null){
+					g.drawImage(getFlag(""), 511,269, this);
+				}
+				else
+					g.drawImage(getFlag(territoryArrayList.get(i).getOwningTeam().toString()), 511,269, this);
+			}
+			if(territoryArrayList.get(i).toString().equals("South Africa")){
+				if(territoryArrayList.get(i).getOwningTeam() == null){
+					g.drawImage(getFlag(""), 514,345, this);
+				}
+				else
+					g.drawImage(getFlag(territoryArrayList.get(i).getOwningTeam().toString()), 514,345, this);
+			}
+			if(territoryArrayList.get(i).toString().equals("Madagascar")){
+				if(territoryArrayList.get(i).getOwningTeam() == null){
+					g.drawImage(getFlag(""), 592,334, this);
+				}
+				else
+					g.drawImage(getFlag(territoryArrayList.get(i).getOwningTeam().toString()), 592, 334, this);
+			}
+			//EUROPE
+			if(territoryArrayList.get(i).toString().equals("Iceland")){
+				if(territoryArrayList.get(i).getOwningTeam() == null){
+					g.drawImage(getFlag(""), 403, 35, this);
+				}
+				else
+					g.drawImage(getFlag(territoryArrayList.get(i).getOwningTeam().toString()), 403,35, this);
+			}
+			if(territoryArrayList.get(i).toString().equals("Great Britain")){
+				if(territoryArrayList.get(i).getOwningTeam() == null){
+					g.drawImage(getFlag(""), 438,73, this);
+				}
+				else
+					g.drawImage(getFlag(territoryArrayList.get(i).getOwningTeam().toString()), 438,73, this);
+			}
+			if(territoryArrayList.get(i).toString().equals("Western Europe")){
+				if(territoryArrayList.get(i).getOwningTeam() == null){
+					g.drawImage(getFlag(""), 424,120, this);
+				}
+				else
+					g.drawImage(getFlag(territoryArrayList.get(i).getOwningTeam().toString()), 424,120, this);
+			}
+			if(territoryArrayList.get(i).toString().equals("Scandinavia")){
+				if(territoryArrayList.get(i).getOwningTeam() == null){
+					g.drawImage(getFlag(""), 487,39, this);
+				}
+				else
+					g.drawImage(getFlag(territoryArrayList.get(i).getOwningTeam().toString()), 487,39, this);
+			}
+			if(territoryArrayList.get(i).toString().equals("Northern Europe")){
+				if(territoryArrayList.get(i).getOwningTeam() == null){
+					g.drawImage(getFlag(""), 481,86, this);
+				}
+				else
+					g.drawImage(getFlag(territoryArrayList.get(i).getOwningTeam().toString()), 481,86, this);
+			}
+			if(territoryArrayList.get(i).toString().equals("Southern Europe")){
+				if(territoryArrayList.get(i).getOwningTeam() == null){
+					g.drawImage(getFlag(""), 508,116, this);
+				}
+				else
+					g.drawImage(getFlag(territoryArrayList.get(i).getOwningTeam().toString()), 508,116, this);
+			}
+			if(territoryArrayList.get(i).toString().equals("Ukraine")){
+				if(territoryArrayList.get(i).getOwningTeam() == null){
+					g.drawImage(getFlag(""), 555,67, this);
+				}
+				else
+					g.drawImage(getFlag(territoryArrayList.get(i).getOwningTeam().toString()), 555,67, this);
+			}
+			//ASIA
+			if(territoryArrayList.get(i).toString().equals("Middle East")){
+				if(territoryArrayList.get(i).getOwningTeam() == null){
+					g.drawImage(getFlag(""), 582,168, this);
+				}
+				else
+					g.drawImage(getFlag(territoryArrayList.get(i).getOwningTeam().toString()), 582,168, this);
+			}
+			if(territoryArrayList.get(i).toString().equals("Afghanistan")){
+				if(territoryArrayList.get(i).getOwningTeam() == null){
+					g.drawImage(getFlag(""), 638,113, this);
+				}
+				else
+					g.drawImage(getFlag(territoryArrayList.get(i).getOwningTeam().toString()), 638,113, this);
+			}
+			if(territoryArrayList.get(i).toString().equals("India")){
+				if(territoryArrayList.get(i).getOwningTeam() == null){
+					g.drawImage(getFlag(""), 688,177, this);
+				}
+				else
+					g.drawImage(getFlag(territoryArrayList.get(i).getOwningTeam().toString()), 688,177, this);
+			}
+			if(territoryArrayList.get(i).toString().equals("China")){
+				if(territoryArrayList.get(i).getOwningTeam() == null){
+					g.drawImage(getFlag(""), 735,147, this);
+				}
+				else
+					g.drawImage(getFlag(territoryArrayList.get(i).getOwningTeam().toString()), 735,147, this);
+			}
+			if(territoryArrayList.get(i).toString().equals("Ural")){
+				if(territoryArrayList.get(i).getOwningTeam() == null){
+					g.drawImage(getFlag(""), 639,57, this);
+				}
+				else
+					g.drawImage(getFlag(territoryArrayList.get(i).getOwningTeam().toString()), 639,57, this);
+			}
+			if(territoryArrayList.get(i).toString().equals("Siberia")){
+				if(territoryArrayList.get(i).getOwningTeam() == null){
+					g.drawImage(getFlag(""),680,32, this);
+				}
+				else
+					g.drawImage(getFlag(territoryArrayList.get(i).getOwningTeam().toString()), 680, 32, this);
+			}
+			if(territoryArrayList.get(i).toString().equals("Yakutsk")){
+				if(territoryArrayList.get(i).getOwningTeam() == null){
+					g.drawImage(getFlag(""), 779,46, this);
+				}
+				else
+					g.drawImage(getFlag(territoryArrayList.get(i).getOwningTeam().toString()), 779,46, this);
+			}
+			if(territoryArrayList.get(i).toString().equals("Kamchatka")){
+				if(territoryArrayList.get(i).getOwningTeam() == null){
+					g.drawImage(getFlag(""), 856,40, this);
+				}
+				else
+					g.drawImage(getFlag(territoryArrayList.get(i).getOwningTeam().toString()), 856,40, this);
+			}
+			if(territoryArrayList.get(i).toString().equals("Irkutsk")){
+				if(territoryArrayList.get(i).getOwningTeam() == null){
+					g.drawImage(getFlag(""), 749,73, this);
+				}
+				else
+					g.drawImage(getFlag(territoryArrayList.get(i).getOwningTeam().toString()), 749,73, this);
+			}
+			if(territoryArrayList.get(i).toString().equals("Mongolia")){
+				if(territoryArrayList.get(i).getOwningTeam() == null){
+					g.drawImage(getFlag(""), 772,107, this);
+				}
+				else
+					g.drawImage(getFlag(territoryArrayList.get(i).getOwningTeam().toString()), 772,107, this);
+			}
+			if(territoryArrayList.get(i).toString().equals("Japan")){
+				if(territoryArrayList.get(i).getOwningTeam() == null){
+					g.drawImage(getFlag(""), 873,135, this);
+				}
+				else
+					g.drawImage(getFlag(territoryArrayList.get(i).getOwningTeam().toString()), 873,135, this);
+			}
+			if(territoryArrayList.get(i).toString().equals("Siam")){
+				if(territoryArrayList.get(i).getOwningTeam() == null){
+					g.drawImage(getFlag(""),769,203, this);
+				}
+				else
+					g.drawImage(getFlag(territoryArrayList.get(i).getOwningTeam().toString()), 769,203, this);
+			}
+			
+			//Australia
+			if(territoryArrayList.get(i).toString().equals("Indonesia")){
+				if(territoryArrayList.get(i).getOwningTeam() == null){
+					g.drawImage(getFlag(""), 815,260, this);
+				}
+				else
+					g.drawImage(getFlag(territoryArrayList.get(i).getOwningTeam().toString()), 815,260, this);
+			}
+			if(territoryArrayList.get(i).toString().equals("New Guinea")){
+				if(territoryArrayList.get(i).getOwningTeam() == null){
+					g.drawImage(getFlag(""), 911,280, this);
+				}
+				else
+					g.drawImage(getFlag(territoryArrayList.get(i).getOwningTeam().toString()), 911,280, this);
+			}
+			if(territoryArrayList.get(i).toString().equals("Western Australia")){
+				if(territoryArrayList.get(i).getOwningTeam() == null){
+					g.drawImage(getFlag(""), 838,371, this);
+				}
+				else
+					g.drawImage(getFlag(territoryArrayList.get(i).getOwningTeam().toString()), 838,371, this);
+			}
+			if(territoryArrayList.get(i).toString().equals("Eastern Australia")){
+				if(territoryArrayList.get(i).getOwningTeam() == null){
+					g.drawImage(getFlag(""), 908,365, this);
+				}
+				else
+					g.drawImage(getFlag(territoryArrayList.get(i).getOwningTeam().toString()), 908,365, this);
+			}
+			
+		}
+		
+		
 	}
 
-	
+	private Image getFlag(String color){
+		Image flag = null;
+		try {
+			if(color.equals("GREEN")){
+				flag = ImageIO.read(new File("images/greenflag.png"));
+			}
+			if(color.equals("RED")){
+				flag = ImageIO.read(new File("images/redflag.png"));
+			}
+			if(color.equals("BLUE")){
+				flag = ImageIO.read(new File("images/blueflag.png"));
+			}
+			if(color.equals("YELLOW")){
+				flag = ImageIO.read(new File("images/yellowflag.png"));
+			}
+			if(color.equals("BLACK")){
+				flag = ImageIO.read(new File("images/blackflag.png"));
+			}
+			if(color.equals("WHITE")){
+				flag = ImageIO.read(new File("images/whiteflag.png"));
+			}
+			else if(color.equals("")){
+				flag = ImageIO.read(new File("images/nomansflag.png"));
+			}
+		} 
+		catch (IOException e) {
+		}
+		return flag;
+	}
 	
 	private class moveButtonListener implements ActionListener{
 
@@ -212,12 +551,12 @@ public class MapView extends MasterViewPanel implements Observer{
 		@Override
 		public void mouseClicked(MouseEvent e) {
 			if(e.getX() < mapImage.getWidth() && e.getY() < mapImage.getHeight()){
-//			System.out.println(e.getX() + "," + e.getY() + " COLOR: " + buffImage.getRGB(e.getX(), e.getY()));
+			System.out.println(e.getX() + "," + e.getY() + " COLOR: " + mapImage.getRGB(e.getX(), e.getY()));
 			//calls helper method designed to check which area is being clicked based on coordinates and color
 			
-//			System.out.println(getLocation(e.getX(), e.getY()));
+			System.out.println(getLocation(e.getX(), e.getY()));
 						
-			System.out.println(territories.get(getLocation(e.getX(), e.getY())).toString());
+//			System.out.println(territories.get(getLocation(e.getX(), e.getY())).toString());
 			}
 		}
 
@@ -260,26 +599,24 @@ public class MapView extends MasterViewPanel implements Observer{
 			if(moveTerritories.size() == 1){
 				chatArea.setText(chatArea.getText() + territories.get(getLocation(e.getX(), e.getY()).toString()) + " to ");
 			}
-//			territories.get(getLocation(e.getX(), e.getY())).toString();
+
 			if(moveTerritories.size() == 2){
 				
 				removeMouseListener(this);
-				chatArea.setText(chatArea.getText() + territories.get(getLocation(e.getX(), e.getY()).toString()) + "\n");
+				chatArea.setText(chatArea.getText() + territories.get(getLocation(e.getX(), e.getY()).toString()) + " with ");
 				
 				String units = JOptionPane.showInputDialog(null, "How many units would you like to move?");
 				int unitInt = 0;
-				try {
-					unitInt = Integer.parseInt(units);
-				} catch (NumberFormatException e1) {
-					units = JOptionPane.showInputDialog(null, "Not a valid input, please enter a number.");
-					unitInt = Integer.parseInt(units);
+					try {
+						unitInt = Integer.parseInt(units);
+					} catch (NumberFormatException e1) {
+						units = JOptionPane.showInputDialog(null, "Not a valid input, please enter a number.");
+						unitInt = Integer.parseInt(units);
 					
+					}
+					chatArea.setText(chatArea.getText() + unitInt + " units.\n");
+					makeMove(moveTerritories.pop(), moveTerritories.pop(), unitInt);
 				}
-				makeMove(moveTerritories.pop(), moveTerritories.pop(), unitInt);
-				
-					
-			}
-//			System.out.println(ter.toString());
 			}
 		}
 
@@ -522,6 +859,7 @@ public class MapView extends MasterViewPanel implements Observer{
 		return "";
 		
 	}
+	
 	
 	/**
 	 * 
