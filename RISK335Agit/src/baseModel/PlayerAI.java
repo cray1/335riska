@@ -16,7 +16,6 @@ import java.util.Observer;
 public class PlayerAI extends Player implements Observer {
 	private Game game;
 	private boolean turnOver;
-	private boolean endAI;
 	public boolean initialUnitsPlaced;
 	private boolean allContinentsHaveBeenClaimed;
 
@@ -28,21 +27,20 @@ public class PlayerAI extends Player implements Observer {
 	public PlayerAI(Team t) {
 		super(t);
 		turnOver = true;
-		endAI = false;
 		game = new Game();
 		initialUnitsPlaced = false;
-		allContinentsHaveBeenClaimed = false;
 		// TODO Auto-generated constructor stub
 
-		while (!endAI) {
-			placeInitialUnits();
-			chooseCardsTurnIn();
-			setPlacementPriority();
-			chooseUnitPlacement();
-			chooseAttack();
-			chooseMove();
-			endTurn();
-		}
+	}
+
+	public void startTurn() {
+		placeInitialUnits();
+		chooseCardsTurnIn();
+		setPlacementPriority();
+		chooseUnitPlacement();
+		chooseAttack();
+		chooseMove();
+		endTurn();
 	}
 
 	/**
