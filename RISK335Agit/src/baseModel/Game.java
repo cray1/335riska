@@ -26,6 +26,7 @@ public class Game extends CommandInterface implements Observer {
 	private ArrayList<Die> defendDice;
 	private ArrayList<Die> attackDice;
 	private Player activePlayer;
+	private Iterator<Player> activeItr;
 
 	/**
 	 * @author Chris Ray Created on 8:57:30 AM Dec 2, 2011
@@ -454,6 +455,25 @@ public class Game extends CommandInterface implements Observer {
 	@Override
 	public Move getMove() {
 		return move;
+	}
+
+	/**
+	 * @param move
+	 *            the move to set
+	 * @author Chris Ray Created on 9:07:24 PM Nov 29, 2011
+	 */
+	@Override
+	public boolean setMove(Move move) {
+		try {
+			this.move = move;
+			this.notifyObservers(move);
+			return true;
+
+		} catch (Exception e) {
+			System.err.print(e.getMessage());
+			return false;
+
+		}
 	}
 
 	/**

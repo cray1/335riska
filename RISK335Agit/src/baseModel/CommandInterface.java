@@ -167,11 +167,17 @@ public abstract class CommandInterface extends Observable {
 	public abstract Move getMove();
 
 	/**
-	 * Do not Call this from the GUI. This is for network only
-	 * 
 	 * @author Chris Ray Created on 11:07:27 AM Dec 4, 2011
 	 * @param move
 	 * @return
+	 * 
+	 */
+	public abstract boolean setMove(Move move);
+
+	/**
+	 * @author Chris Ray Created on 8:29:07 PM Dec 4, 2011
+	 * @return true if all the territories of the map are claimed by at least
+	 *         one unit
 	 * 
 	 */
 	public abstract boolean allTerritoriesClaimed();
