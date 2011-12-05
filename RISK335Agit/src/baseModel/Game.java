@@ -5,6 +5,7 @@
  */
 package baseModel;
 
+import java.awt.EventQueue;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -28,6 +29,7 @@ public class Game extends CommandInterface implements Observer {
 	private ArrayList<Die> attackDice;
 	private Player activePlayer;
 	private Iterator<Player> activeItr;
+	public boolean killAI = false;
 
 	/**
 	 * @author Chris Ray Created on 8:57:30 AM Dec 2, 2011
@@ -42,6 +44,18 @@ public class Game extends CommandInterface implements Observer {
 			for (Player p : players)
 				if (p instanceof PlayerAI)
 					this.addObserver((PlayerAI) p);
+			EventQueue.invokeLater(new Runnable() {
+				@Override
+				public void run() {
+					try {
+						while (!killAI)
+							if (activePlayer instanceof PlayerAI)
+								((PlayerAI) activePlayer).startTurn();
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			});
 			return true;
 
 		} else
@@ -82,10 +96,6 @@ public class Game extends CommandInterface implements Observer {
 		attackDice = new ArrayList<Die>();
 		// setActivePlayer(activeItr.next()); // placeholder
 
-		/*
-		 * turnPhase = new LinkedList<String>(); turnPhase.add(newPh);
-		 * turnPhase.add(attackPh); turnPhase.add(movePh);
-		 */
 	}
 
 	/*
@@ -636,16 +646,13 @@ public class Game extends CommandInterface implements Observer {
 	 */
 	@Override
 	public void update(Observable o, Object arg) {
-		// Player AI stuff
-		if ((o instanceof PlayerAI) && (arg instanceof Game)) {
-			this.map = ((Game) arg).getMap();
-			this.deck = ((Game) arg).getDeck();
-			this.move = ((Game) arg).getMove();
-			this.defendDice = ((Game) arg).getDefendDice();
-			this.attackDice = ((Game) arg).getAttackDice();
-			this.unitMultiplier = ((Game) arg).getUnitMultiplier();
-			this.players = ((Game) arg).getPlayers();
-		}
+		// for AI only.....sets the next player when AI finishes it's turn
+		if ((o instanceof PlayerAI) && (arg instanceof Boolean))
+			if ((activePlayer != players.getLast()) && (players.size() > 1))
+				this.setActivePlayer(players.get((players
+						.indexOf(this.activePlayer) + 1)));
+			else
+				this.setActivePlayer(players.getFirst());
 	}
 
 }

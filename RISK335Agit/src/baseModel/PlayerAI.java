@@ -27,7 +27,7 @@ public class PlayerAI extends Player implements Observer {
 	public PlayerAI(Team t) {
 		super(t);
 		turnOver = true;
-		game = new Game();
+		game = null;
 		initialUnitsPlaced = false;
 		// TODO Auto-generated constructor stub
 
@@ -449,7 +449,6 @@ public class PlayerAI extends Player implements Observer {
 	private void endTurn() {
 		// TODO Auto-generated method stub
 		this.turnOver = true;
-		this.notifyObservers(game);
 		this.notifyObservers(this.turnOver);
 	}
 
