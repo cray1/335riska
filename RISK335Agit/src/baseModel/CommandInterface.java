@@ -196,4 +196,15 @@ public abstract class CommandInterface extends Observable {
 	 * 
 	 */
 	public abstract boolean allTerritoriesClaimed();
+
+	/**
+	 * Please call this at the beginning of every player's turn. It awards them
+	 * their newUnits every turn. Call this AFTER calling turnInCards if the
+	 * user is turning in cards
+	 * 
+	 * @author Chris Ray Created on 8:40:45 PM Dec 4, 2011
+	 * 
+	 * 
+	 */
+	public abstract void awardBeginningUnits();
 }

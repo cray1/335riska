@@ -642,4 +642,25 @@ public class Game extends CommandInterface implements Observer {
 		return true;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see baseModel.CommandInterface#beginTurn()
+	 * 
+	 * @author Chris Ray Created on 8:42:05 PM Dec 4, 2011
+	 */
+	@Override
+	public void awardBeginningUnits() {
+		// based on number of territories owned
+		activePlayer
+				.setNewUnits((activePlayer.getTerritoriesOwned().size() / 3)
+						+ activePlayer.getNewUnits());
+		// based on continentsOwned
+		int award = activePlayer.getNewUnits();
+		for (Continent con : activePlayer.getContinentsOwned())
+			award += con.getBonusUnitsIfOwned();
+		activePlayer.setNewUnits(award);
+
+	}
+
 }
