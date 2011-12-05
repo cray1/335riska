@@ -17,6 +17,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -35,6 +36,7 @@ import javax.swing.JLabel;
 import baseModel.Continent;
 import baseModel.Game;
 import baseModel.Map;
+import baseModel.Move;
 import baseModel.Player;
 import baseModel.Team;
 import baseModel.Territory;
@@ -54,7 +56,6 @@ public class MapView extends MasterViewPanel implements Observer{
 	JTextArea chatArea;
     JTextField typeArea;
 	HashMap<String, Territory> territories;
-	
 	
 	public MapView(MasterView m) {
 		super(m);
@@ -76,7 +77,7 @@ public class MapView extends MasterViewPanel implements Observer{
 		
 		add(mapBox);
 		
-		this.addMouseListener(new mouse());
+//		this.addMouseListener(new mouse());
 		//Adds motion listener for tooltip text
 		this.addMouseMotionListener(new mouseMove());
 		setUpUserBar();	
@@ -181,18 +182,27 @@ public class MapView extends MasterViewPanel implements Observer{
 		territories.get("Alaska").setOwningTeam(Team.GREEN);
 	}
 
+	LinkedList<Territory> ter = new LinkedList<Territory>();
 	private class moveButtonListener implements ActionListener{
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 //			System.out.print("To be implemented...");
 //			JOptionPane.showMessageDialog(null, "Choose your move!");
-			
-			
+						
+			chatArea.setText(chatArea.getText() + "\nMoving from ");
+			addMouseListener(new moveListener());
 		}
 		
 	}
-	
+	private void makeMove(Territory orig, Territory dest){
+		Move newMove = new Move();
+		
+		newMove.setOrig(orig);
+		newMove.setDest(dest);
+		System.out.println("Move made!");
+		
+	}
 	private class mouse implements MouseListener{
 
 		@Override
@@ -204,6 +214,51 @@ public class MapView extends MasterViewPanel implements Observer{
 //			System.out.println(getLocation(e.getX(), e.getY()));
 						
 			System.out.println(territories.get(getLocation(e.getX(), e.getY())).toString());
+			}
+		}
+
+		@Override
+		public void mouseEntered(MouseEvent e) {
+	
+		}
+
+		@Override
+		public void mouseExited(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mousePressed(MouseEvent e) {
+			// TODO Auto-generated method stub
+		
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent e) {
+			// TODO Auto-generated method stub
+
+
+		}
+		
+	}
+	private class moveListener implements MouseListener{
+
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			if(e.getX() < mapImage.getWidth() && e.getY() < mapImage.getHeight()){
+			
+			ter.add(territories.get(getLocation(e.getX(), e.getY())));
+			if(ter.size() == 1){
+				chatArea.setText(chatArea.getText() + territories.get(getLocation(e.getX(), e.getY()).toString()) + " to ");
+			}
+//			territories.get(getLocation(e.getX(), e.getY())).toString();
+			if(ter.size() == 2){
+				makeMove(ter.pop(), ter.pop());
+				removeMouseListener(this);
+				chatArea.setText(chatArea.getText() + territories.get(getLocation(e.getX(), e.getY()).toString()));
+			}
+//			System.out.println(ter.toString());
 			}
 		}
 
@@ -446,6 +501,7 @@ public class MapView extends MasterViewPanel implements Observer{
 		return "";
 		
 	}
+	
 	/**
 	 * 
 	 * @author Aj Venne
