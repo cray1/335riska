@@ -41,6 +41,8 @@ public class PlayerAI extends Player implements Observer {
 	 * 
 	 */
 	public void startTurn() {
+		turnOver = false;
+		this.notifyObservers(this.turnOver);
 		game.setActivePlayer(this);
 		game.awardBeginningUnits();
 		placeInitialUnits();
@@ -446,7 +448,8 @@ public class PlayerAI extends Player implements Observer {
 	 */
 	private void endTurn() {
 		// TODO Auto-generated method stub
-		this.notifyObservers(game.getMap());
+		this.turnOver = true;
+		this.notifyObservers(game);
 		this.notifyObservers(this.turnOver);
 	}
 

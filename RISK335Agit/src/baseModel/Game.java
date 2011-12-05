@@ -18,6 +18,7 @@ import java.util.Observer;
  */
 public class Game extends CommandInterface implements Observer {
 	private CardDeck deck;
+
 	private int unitMultiplier;
 	private Map map;
 	private Boolean firstTerritory;
@@ -46,6 +47,14 @@ public class Game extends CommandInterface implements Observer {
 		} else
 			return false;
 
+	}
+
+	/**
+	 * @return the deck
+	 * @author Chris Ray Created on 9:50:43 PM Dec 4, 2011
+	 */
+	public CardDeck getDeck() {
+		return deck;
 	}
 
 	private boolean checkSetUp() {
@@ -585,20 +594,6 @@ public class Game extends CommandInterface implements Observer {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see java.util.Observer#update(java.util.Observable, java.lang.Object)
-	 * 
-	 * @author Chris Ray Created on 1:35:19 PM Dec 4, 2011
-	 */
-	@Override
-	public void update(Observable o, Object arg) {
-		// Player AI stuff
-		if ((o instanceof PlayerAI) && (arg instanceof Map))
-			this.map = (Map) arg;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
 	 * @see baseModel.CommandInterface#allTerritoriesClaimed()
 	 * 
 	 * @author Chris Ray Created on 8:29:39 PM Dec 4, 2011
@@ -630,6 +625,27 @@ public class Game extends CommandInterface implements Observer {
 			award += con.getBonusUnitsIfOwned();
 		activePlayer.setNewUnits(award);
 
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.util.Observer#update(java.util.Observable, java.lang.Object)
+	 * 
+	 * @author Chris Ray Created on 1:35:19 PM Dec 4, 2011
+	 */
+	@Override
+	public void update(Observable o, Object arg) {
+		// Player AI stuff
+		if ((o instanceof PlayerAI) && (arg instanceof Game)) {
+			this.map = ((Game) arg).getMap();
+			this.deck = ((Game) arg).getDeck();
+			this.move = ((Game) arg).getMove();
+			this.defendDice = ((Game) arg).getDefendDice();
+			this.attackDice = ((Game) arg).getAttackDice();
+			this.unitMultiplier = ((Game) arg).getUnitMultiplier();
+			this.players = ((Game) arg).getPlayers();
+		}
 	}
 
 }
