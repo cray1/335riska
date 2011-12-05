@@ -155,7 +155,7 @@ public class Game extends CommandInterface implements Observer {
 			this.notifyObservers(activePlayer);
 			return true;
 		} else
-			return true;
+			return false;
 	}
 
 	private boolean isValidTurnin(TerritoryCard card1, TerritoryCard card2,
@@ -165,21 +165,33 @@ public class Game extends CommandInterface implements Observer {
 		cards.add(card1);
 		cards.add(card2);
 		cards.add(card3);
-		if ((card1.getCardType() == CardType.WILDCARD)
-				|| (card2.getCardType() == CardType.WILDCARD)
-				|| (card3.getCardType() == CardType.WILDCARD))
+		if (checkContains(cards, CardType.WILDCARD))
 			return true;
 		// 3 of a kind
 		else if ((card1.getCardType() == card2.getCardType())
 				&& (card2.getCardType() == card3.getCardType()))
 			return true;
 		// 1 of each
-		else if (cards.contains(CardType.CANNON)
-				&& cards.contains(CardType.HORSE)
-				&& cards.contains(CardType.SOLDIER))
+		else if (checkContains(cards, CardType.CANNON)
+				&& checkContains(cards, CardType.SOLDIER)
+				&& checkContains(cards, CardType.HORSE))
 			return true;
 		else
 			return false;
+	}
+
+	/**
+	 * Checks to see if an ArrayList<TerritoryCard> contains a certain cardType
+	 * 
+	 * @author Chris Ray Created on 4:30:55 PM Dec 5, 2011
+	 * 
+	 */
+	private boolean checkContains(ArrayList<TerritoryCard> cards, CardType ct) {
+		for (TerritoryCard card : cards)
+			if (card.getCardType().equals(ct))
+				return true;
+		return false;
+
 	}
 
 	/*
