@@ -627,4 +627,19 @@ public class Game extends CommandInterface implements Observer {
 			this.map = (Map) arg;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see baseModel.CommandInterface#allTerritoriesClaimed()
+	 * 
+	 * @author Chris Ray Created on 8:29:39 PM Dec 4, 2011
+	 */
+	@Override
+	public boolean allTerritoriesClaimed() {
+		for (Continent con : map.getMap().values())
+			if (!con.isClaimed())
+				return false;
+		return true;
+	}
+
 }
