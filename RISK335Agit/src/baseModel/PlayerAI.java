@@ -33,7 +33,16 @@ public class PlayerAI extends Player implements Observer {
 
 	}
 
+	/**
+	 * Call this when it is the AI's turn....do not call awardBeginningUnits in
+	 * game...ai takes care of that.
+	 * 
+	 * @author Chris Ray Created on 9:38:53 PM Dec 4, 2011
+	 * 
+	 */
 	public void startTurn() {
+		game.setActivePlayer(this);
+		game.awardBeginningUnits();
 		placeInitialUnits();
 		chooseCardsTurnIn();
 		setPlacementPriority();
