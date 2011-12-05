@@ -27,12 +27,6 @@ public class Game extends CommandInterface implements Observer {
 	private ArrayList<Die> attackDice;
 	private Player activePlayer;
 	private Iterator<Player> activeItr;
-	private List<String> turnPhase;
-	private String currentPhase = "";
-
-	private String newPh = "New Units Phase";
-	private String attackPh = "Attack Phase";
-	private String movePh = "Move Phase";
 
 	/**
 	 * @author Chris Ray Created on 8:57:30 AM Dec 2, 2011
@@ -588,31 +582,6 @@ public class Game extends CommandInterface implements Observer {
 		}
 	}
 
-	/**
-	 * @return the currentPhase
-	 * @author Chris Ray Created on 8:52:07 AM Dec 2, 2011
-	 */
-	@Override
-	public String getCurrentPhase() {
-		return currentPhase;
-	}
-
-	/**
-	 * @param currentPhase
-	 *            the currentPhase to set
-	 * @author Chris Ray Created on 8:52:07 AM Dec 2, 2011
-	 */
-	@Override
-	public boolean setCurrentPhase(String currentPhase) {
-		try {
-			this.currentPhase = currentPhase;
-			return true;
-		} catch (Exception e) {
-			System.err.print(e.getMessage());
-			return false;
-		}
-	}
-
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -625,6 +594,42 @@ public class Game extends CommandInterface implements Observer {
 		// Player AI stuff
 		if ((o instanceof PlayerAI) && (arg instanceof Map))
 			this.map = (Map) arg;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see baseModel.CommandInterface#allTerritoriesClaimed()
+	 * 
+	 * @author Chris Ray Created on 8:29:39 PM Dec 4, 2011
+	 */
+	@Override
+	public boolean allTerritoriesClaimed() {
+		for (Continent con : map.getMap().values())
+			if (!con.isClaimed())
+				return false;
+		return true;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see baseModel.CommandInterface#beginTurn()
+	 * 
+	 * @author Chris Ray Created on 8:42:05 PM Dec 4, 2011
+	 */
+	@Override
+	public void awardBeginningUnits() {
+		// based on number of territories owned
+		activePlayer
+				.setNewUnits((activePlayer.getTerritoriesOwned().size() / 3)
+						+ activePlayer.getNewUnits());
+		// based on continentsOwned
+		int award = activePlayer.getNewUnits();
+		for (Continent con : activePlayer.getContinentsOwned())
+			award += con.getBonusUnitsIfOwned();
+		activePlayer.setNewUnits(award);
+
 	}
 
 }

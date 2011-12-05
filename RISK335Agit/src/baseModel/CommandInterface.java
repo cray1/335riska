@@ -145,21 +145,6 @@ public abstract class CommandInterface extends Observable {
 	public abstract boolean setActivePlayer(Player activePlayer);
 
 	/**
-	 * @author Chris Ray Created on 11:02:33 AM Dec 4, 2011
-	 * @return
-	 * 
-	 */
-	public abstract String getCurrentPhase();
-
-	/**
-	 * @author Chris Ray Created on 11:02:36 AM Dec 4, 2011
-	 * @param currentPhase
-	 * @return
-	 * 
-	 */
-	public abstract boolean setCurrentPhase(String currentPhase);
-
-	/**
 	 * @author Chris Ray Created on 11:02:44 AM Dec 4, 2011
 	 * @return
 	 * 
@@ -188,4 +173,23 @@ public abstract class CommandInterface extends Observable {
 	 * 
 	 */
 	public abstract boolean setMove(Move move);
+
+	/**
+	 * @author Chris Ray Created on 8:29:07 PM Dec 4, 2011
+	 * @return true if all the territories of the map are claimed by at least
+	 *         one unit
+	 * 
+	 */
+	public abstract boolean allTerritoriesClaimed();
+
+	/**
+	 * Please call this at the beginning of every player's turn. It awards them
+	 * their newUnits every turn. Call this AFTER calling turnInCards if the
+	 * user is turning in cards
+	 * 
+	 * @author Chris Ray Created on 8:40:45 PM Dec 4, 2011
+	 * 
+	 * 
+	 */
+	public abstract void awardBeginningUnits();
 }

@@ -16,7 +16,6 @@ import java.util.Observer;
 public class PlayerAI extends Player implements Observer {
 	private Game game;
 	private boolean turnOver;
-	private boolean endAI;
 	public boolean initialUnitsPlaced;
 	private boolean allContinentsHaveBeenClaimed;
 
@@ -28,21 +27,29 @@ public class PlayerAI extends Player implements Observer {
 	public PlayerAI(Team t) {
 		super(t);
 		turnOver = true;
-		endAI = false;
 		game = new Game();
 		initialUnitsPlaced = false;
-		allContinentsHaveBeenClaimed = false;
 		// TODO Auto-generated constructor stub
 
-		while (!endAI) {
-			placeInitialUnits();
-			chooseCardsTurnIn();
-			setPlacementPriority();
-			chooseUnitPlacement();
-			chooseAttack();
-			chooseMove();
-			endTurn();
-		}
+	}
+
+	/**
+	 * Call this when it is the AI's turn....do not call awardBeginningUnits in
+	 * game...ai takes care of that.
+	 * 
+	 * @author Chris Ray Created on 9:38:53 PM Dec 4, 2011
+	 * 
+	 */
+	public void startTurn() {
+		game.setActivePlayer(this);
+		game.awardBeginningUnits();
+		placeInitialUnits();
+		chooseCardsTurnIn();
+		setPlacementPriority();
+		chooseUnitPlacement();
+		chooseAttack();
+		chooseMove();
+		endTurn();
 	}
 
 	/**
