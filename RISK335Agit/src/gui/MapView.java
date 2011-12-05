@@ -94,7 +94,7 @@ public class MapView extends MasterViewPanel implements Observer{
 		userBar.setPreferredSize(new Dimension(mapImage.getWidth(null) -50, 200));
 		
 		this.add(userBar);
-		JLabel turn = new JLabel("\tIt is "+ game.getActivePlayer().getTeam() +"\'s turn, " + game.getCurrentPhase() + "phase.");
+		JLabel turn = new JLabel("\tIt is "+ game.getActivePlayer().getTeam() +"\'s turn");
 		JButton surrender = new JButton("Surrender");
 		
 		JButton turnInCards = new JButton("Turn in Cards");
